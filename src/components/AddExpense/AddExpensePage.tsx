@@ -340,7 +340,7 @@ export const AddOrEditExpensePage: React.FC<{
           <div className="h-[180px]">
             {amount && '' !== description ? (
               <>
-                <div className="flex flex-col items-center justify-center text-sm text-gray-400 sm:mt-4 sm:flex-row">
+                <div className="text-muted-foreground flex flex-col items-center justify-center text-sm sm:mt-4 sm:flex-row">
                   <p>{t(`ui.expense.${isNegative ? 'received_by' : 'paid_by'}`)}</p>
                   <PayerSelectionForm>
                     <Button

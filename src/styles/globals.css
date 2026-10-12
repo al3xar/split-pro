@@ -11,8 +11,8 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  --color-positive: var(--color-emerald-500);
-  --color-negative: var(--color-orange-600);
+  --color-positive: var(--positive);
+  --color-negative: var(--negative);
 
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
@@ -146,6 +146,10 @@
 
   --radius: 0.5rem;
 
+  /* "Te deben" / "debes": AA (≥ 4.5:1) on the light background */
+  --positive: var(--color-emerald-700);
+  --negative: var(--color-orange-700);
+
   /* Chart palette validated with the dataviz validator (light + dark, CVD-safe) */
   --chart-income: #2a78d6;
   --chart-expense: #eb6834;
@@ -189,6 +193,9 @@
 
   --border: hsl(215 27.9% 16.9%);
   --input: hsl(215 27.9% 16.9%);
+  --positive: var(--color-emerald-500);
+  --negative: var(--color-orange-500);
+
   /* Was hsl(221 39% 11%), indistinguishable from the background: focus rings were invisible */
   --ring: hsl(189 94% 43%);
 

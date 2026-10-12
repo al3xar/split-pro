@@ -55,7 +55,8 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <meta name="msapplication-TileColor" content="#2B5797" />
         <meta name="msapplication-tap-highlight" content="no" />
 
-        <meta name="theme-color" content="#030711" />
+        <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#030711" media="(prefers-color-scheme: dark)" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
         <link rel="apple-touch-icon" href="/icons/ios/144.png" />
@@ -84,7 +85,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       </Head>
       <SessionProvider session={session}>
         <CurrencyHelpersProvider>
-          <ThemeProvider attribute="class" defaultTheme="dark">
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <Toaster toastOptions={toastOptions} />
             {(Component as NextPageWithUser).auth ? (
               <Auth pageProps={pageProps} Page={Component as NextPageWithUser} />

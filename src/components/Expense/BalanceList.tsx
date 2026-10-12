@@ -82,7 +82,7 @@ export const BalanceList: React.FC<{
                 <div className="text-foreground line-clamp-2 min-w-0 break-words">
                   {displayName(user, userQuery.data?.id)}
                   {Object.values(total).every((amount) => 0n === amount) ? (
-                    <span className="text-gray-400">
+                    <span className="text-muted-foreground">
                       {' '}
                       {isCurrentUser
                         ? t('expense_details.balance_list.are_settled_up')
@@ -90,7 +90,7 @@ export const BalanceList: React.FC<{
                     </span>
                   ) : (
                     <>
-                      <span className="text-gray-400">
+                      <span className="text-muted-foreground">
                         {' '}
                         {t(
                           `ui.expense.${isCurrentUser ? 'you' : 'user'}.${0 < totalAmount[1] ? 'lent' : 'owe'}`,
@@ -146,7 +146,7 @@ export const BalanceList: React.FC<{
                             <EntityAvatar entity={friend} size={20} />
                             <div className="text-foreground">
                               {displayName(friend, userQuery.data?.id)}
-                              <span className="text-gray-400">
+                              <span className="text-muted-foreground">
                                 {' '}
                                 {t(
                                   `ui.expense.${friend.id === userQuery.data?.id ? 'you' : 'user'}.${0 > amount ? 'get' : 'pay'}`,
@@ -160,7 +160,7 @@ export const BalanceList: React.FC<{
                               >
                                 {getCurrencyHelpersCached(currency).toUIString(BigMath.abs(amount))}
                               </span>
-                              <span className="xs:inline hidden text-gray-400">
+                              <span className="xs:inline text-muted-foreground hidden">
                                 {' '}
                                 {t(`ui.expense.${0 < amount ? 'to' : 'from'}`, {
                                   ns: 'common',

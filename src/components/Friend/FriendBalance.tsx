@@ -20,7 +20,7 @@ export const FriendBalance: React.FC<{
         <EntityAvatar entity={user} size={30} />
         <div>
           <div className="text-foreground">{user.name}</div>
-          {groupName ? <div className="text-xs text-gray-500">{groupName}</div> : null}
+          {groupName ? <div className="text-muted-foreground text-xs">{groupName}</div> : null}
         </div>
       </div>
       <div>

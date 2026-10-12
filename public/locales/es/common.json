@@ -63,7 +63,13 @@
     },
     "support_us": "Patrocínanos",
     "title": "Cuenta",
-    "write_review": "Escribir una reseña"
+    "write_review": "Escribir una reseña",
+    "theme": "Apariencia",
+    "themes": {
+      "system": "Sistema",
+      "light": "Claro",
+      "dark": "Oscuro"
+    }
   },
   "actions": {
     "add_expense": "Añadir gasto",

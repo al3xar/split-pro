@@ -74,6 +74,12 @@
       "send_test_notification": "Send test notification",
       "test_notification_sent": "Test notification sent",
       "test_notification_failed": "Could not send test notification"
+    },
+    "theme": "Appearance",
+    "themes": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
     }
   },
   "actions": {

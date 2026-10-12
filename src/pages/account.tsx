@@ -18,6 +18,7 @@ import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { AccountButton } from '~/components/Account/AccountButton';
+import { ThemeSelector } from '~/components/Account/ThemeSelector';
 import { DownloadAppDrawer } from '~/components/Account/DownloadAppDrawer';
 import { LanguagePicker } from '~/components/Account/LanguagePicker';
 import { SubmitFeedback } from '~/components/Account/SubmitFeedback';
@@ -105,7 +106,7 @@ const AccountPage: NextPageWithUser<{
             <EntityAvatar entity={userQuery.data} size={50} />
             <div>
               <div className="text-xl font-semibold">{userQuery.data?.name}</div>
-              <div className="text-sm text-gray-500">{userQuery.data?.email}</div>
+              <div className="text-muted-foreground text-sm">{userQuery.data?.email}</div>
             </div>
           </div>
           {!userQuery.isPending && (
@@ -119,6 +120,7 @@ const AccountPage: NextPageWithUser<{
           )}
         </div>
         <div className="mt-8 flex flex-col gap-4">
+          <ThemeSelector />
           <LanguagePicker>
             <AccountButton>
               <Languages className="size-5 text-green-500" />

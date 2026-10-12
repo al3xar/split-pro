@@ -96,10 +96,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
             currentPath={currentPath}
           />
         </nav>
-        <div
-          className="w-full overflow-auto lg:border-x lg:border-gray-900 lg:px-6"
-          id="mainlayout"
-        >
+        <div className="lg:border-border w-full overflow-auto lg:border-x lg:px-6" id="mainlayout">
           {title ? (
             <div className="mb-2 flex items-center justify-between px-4 py-4">
               {'string' === typeof title ? (
