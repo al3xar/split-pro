@@ -55,6 +55,13 @@ describe('parseRegistry', () => {
     expect(dinner.allocations.reduce((sum, a) => sum + a.amount, 0n)).toBe(dinner.amount);
   });
 
+  it('includes people who only appear in entries (e.g. former members)', () => {
+    const withFormer = JSON.parse(JSON.stringify(registry)) as typeof registry;
+    const entry = withFormer.Response[0]!.Registry.all_registry_entry[0]!.RegistryEntry;
+    entry.allocations[1]!.membership.RegistryMembershipNonUser.alias.display_name = 'Marta';
+    expect(parseRegistry(withFormer).members).toEqual(['Ana', 'Luis', 'Marta']);
+  });
+
   it('rejects unknown shapes', () => {
     expect(() => parseRegistry({ Response: [] })).toThrow('INVALID_TRICOUNT');
   });

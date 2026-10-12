@@ -149,12 +149,15 @@ export const parseRegistry = (json: unknown): ParsedTricount => {
     };
   });
 
-  return {
-    title: registry.title,
-    currency,
-    members: registry.memberships.map(memberName),
-    entries,
-  };
+  // People can appear in entries without a membership (e.g. someone who left the tricount).
+  const members = [
+    ...new Set([
+      ...registry.memberships.map(memberName),
+      ...entries.flatMap((e) => [e.payer, ...e.allocations.map((a) => a.member)]),
+    ]),
+  ];
+
+  return { title: registry.title, currency, members, entries };
 };
 
 const KEYWORDS: [RegExp, string][] = [
