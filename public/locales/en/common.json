@@ -611,5 +611,41 @@
     "choose_group": "Choose a group",
     "import_tricount": "Import from Tricount",
     "what_on_you": "What you spent on"
+  },
+  "tricount": {
+    "title": "Import from Tricount",
+    "link_label": "Tricount link",
+    "link_hint": "In Tricount, open the tricount → Share → copy the link, and paste it here.",
+    "preview": "Preview",
+    "expenses": "Expenses",
+    "transfers": "Reimbursements",
+    "incomes": "Incomes",
+    "total": "Total spent",
+    "dates": "Dates",
+    "already_imported": "{{count}} entries were already imported into “{{group}}”. Only new ones will be added.",
+    "members_title": "Who is who",
+    "members_hint": "Match each Tricount participant with a SplitPro person.",
+    "me": "Me",
+    "new_person": "Someone else (email)",
+    "email_for": "Email for {{name}}",
+    "email_placeholder": "email@example.com",
+    "one_me": "Choose “Me” for exactly one participant.",
+    "group_name": "Group name",
+    "use_as_household": "Use as Household",
+    "import": "Import",
+    "importing": "Importing…",
+    "done_title": "Import finished",
+    "done_body": "{{created}} entries imported, {{skipped}} already existed.",
+    "go_household": "Go to Household",
+    "errors": {
+      "INVALID_LINK": "That does not look like a Tricount link.",
+      "TRICOUNT_NOT_FOUND": "No tricount found with that link.",
+      "TRICOUNT_UNAVAILABLE": "Could not reach Tricount. Try again later.",
+      "TRICOUNT_FORMAT_CHANGED": "Tricount answered in an unexpected format; the importer needs an update.",
+      "UNMAPPED_MEMBERS": "Every participant needs a person.",
+      "ONE_MEMBER_MUST_BE_YOU": "Choose “Me” for exactly one participant.",
+      "EMAIL_REQUIRED": "Add an email for each new person.",
+      "generic": "Something went wrong. Try again."
+    }
   }
 }

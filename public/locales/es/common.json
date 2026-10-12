@@ -573,5 +573,41 @@
     "choose_group": "Elegir un grupo",
     "import_tricount": "Importar de Tricount",
     "what_on_you": "En qué has gastado tú"
+  },
+  "tricount": {
+    "title": "Importar de Tricount",
+    "link_label": "Enlace de Tricount",
+    "link_hint": "En Tricount, abre el tricount → Compartir → copiar enlace, y pégalo aquí.",
+    "preview": "Vista previa",
+    "expenses": "Gastos",
+    "transfers": "Reembolsos",
+    "incomes": "Ingresos",
+    "total": "Total gastado",
+    "dates": "Fechas",
+    "already_imported": "Ya se importaron {{count}} movimientos en «{{group}}». Solo se añadirán los nuevos.",
+    "members_title": "Quién es quién",
+    "members_hint": "Empareja cada participante de Tricount con una persona de SplitPro.",
+    "me": "Yo",
+    "new_person": "Otra persona (email)",
+    "email_for": "Email de {{name}}",
+    "email_placeholder": "email@ejemplo.com",
+    "one_me": "Elige «Yo» en exactamente un participante.",
+    "group_name": "Nombre del grupo",
+    "use_as_household": "Usar como Hogar",
+    "import": "Importar",
+    "importing": "Importando…",
+    "done_title": "Importación terminada",
+    "done_body": "{{created}} movimientos importados, {{skipped}} ya existían.",
+    "go_household": "Ir al Hogar",
+    "errors": {
+      "INVALID_LINK": "Eso no parece un enlace de Tricount.",
+      "TRICOUNT_NOT_FOUND": "No hay ningún tricount con ese enlace.",
+      "TRICOUNT_UNAVAILABLE": "No se ha podido conectar con Tricount. Inténtalo más tarde.",
+      "TRICOUNT_FORMAT_CHANGED": "Tricount ha respondido con un formato inesperado; hay que actualizar el importador.",
+      "UNMAPPED_MEMBERS": "Cada participante necesita una persona.",
+      "ONE_MEMBER_MUST_BE_YOU": "Elige «Yo» en exactamente un participante.",
+      "EMAIL_REQUIRED": "Añade un email para cada persona nueva.",
+      "generic": "Algo ha fallado. Inténtalo de nuevo."
+    }
   }
 }

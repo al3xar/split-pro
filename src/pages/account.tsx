@@ -173,6 +173,11 @@ const AccountPage: NextPageWithUser<{
             {t('navigation.activity')}
           </AccountButton>
 
+          <AccountButton href="/import-tricount">
+            <DownloadCloud className="size-5 text-emerald-500" />
+            {t('tricount.title')}
+          </AccountButton>
+
           <AccountButton href="/import-splitwise">
             <DownloadCloud className="size-5 text-violet-500" />
             {t('account.import_from_splitwise')}
