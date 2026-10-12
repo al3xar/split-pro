@@ -31,8 +31,23 @@ tipo, descripción opcional, fecha). Categorías en `src/lib/finance.ts`.
   4 tarjetas (gastos con variación frente al mes anterior y total del hogar, ingresos, ahorro con
   tasa de ahorro, invertido), desglose por categoría expandible a subcategorías, gráfica de
   ingresos vs gastos de 12 meses con vista en tabla, y gráfica de ahorro mensual (positivo/negativo).
-- `/finances`: ingresos e inversiones del mes, alta/edición/borrado en un cajón, y
-  "Copiar del mes anterior" cuando el mes está vacío.
+- `/finances`: ingresos e inversiones del mes, alta/edición/borrado en un cajón, y sección
+  "Recurrentes".
+
+## Movimientos recurrentes
+
+- Al crear un movimiento se elige **Puntual** (regalo, compensación, paga extra…) o **Cada mes**.
+- "Cada mes" crea una `FinanceRecurrence` (importe, moneda, categoría, descripción, **día del mes**
+  1-31 elegido por el usuario, mes de inicio = mes que se está viendo).
+- Los movimientos se generan al abrir Análisis o Ingresos (sin tareas programadas): todos los
+  meses pendientes hasta hoy; el mes en curso **solo cuando llega el día de cobro** (en la zona
+  horaria del navegador). Si el mes es más corto que el día elegido, se usa su último día.
+- Cada mes generado es un `FinanceEntry` normal con `recurrenceId`: se puede editar o borrar, y un
+  mes borrado no se vuelve a crear (`lastGeneratedMonth` solo avanza). La generación reclama los
+  meses con una actualización condicional, así que llamadas concurrentes no duplican.
+- Editar una recurrente afecta solo a los meses siguientes. "Dejar de repetir" la desactiva y
+  conserva lo ya creado.
+- Categorías de ingreso añadidas: Regalo y Compensación.
 
 ## Gráficas
 

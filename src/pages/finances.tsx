@@ -1,11 +1,10 @@
-import { type FinanceEntry } from '@prisma/client';
+import { type FinanceEntry, type FinanceRecurrence } from '@prisma/client';
 import { keepPreviousData } from '@tanstack/react-query';
-import { ChevronLeftIcon, CopyIcon, PlusIcon } from 'lucide-react';
+import { ChevronLeftIcon, PlusIcon, RepeatIcon } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Link from 'next/link';
 import React, { useCallback, useMemo, useState } from 'react';
-import { toast } from 'sonner';
 
 import {
   type FinanceEntryDraft,
@@ -16,8 +15,7 @@ import MainLayout from '~/components/Layout/MainLayout';
 import { Button } from '~/components/ui/button';
 import { useMonthParam } from '~/hooks/useMonthParam';
 import { useTranslationWithUtils } from '~/hooks/useTranslationWithUtils';
-import { type FinanceEntryKind, shiftMonth } from '~/lib/analytics';
-import { sameDayNextMonth } from '~/lib/finance';
+import { type FinanceEntryKind } from '~/lib/analytics';
 import { cn } from '~/lib/utils';
 import { type NextPageWithUser } from '~/types';
 import { api } from '~/utils/api';
@@ -44,13 +42,14 @@ const FinancesPage: NextPageWithUser = () => {
   const { month, setMonth, currentMonth, timeZone, isReady } = useMonthParam();
   const [draft, setDraft] = useState<FinanceEntryDraft | null>(null);
   const [editing, setEditing] = useState<FinanceEntry | null>(null);
+  const [editingRecurrence, setEditingRecurrence] = useState<FinanceRecurrence | null>(null);
   const apiUtils = api.useUtils();
 
   const monthQuery = api.finance.getMonth.useQuery(
     { month, timeZone },
     { placeholderData: keepPreviousData, enabled: isReady },
   );
-  const createManyMutation = api.finance.createMany.useMutation();
+  const recurrencesQuery = api.finance.getRecurrences.useQuery();
 
   const defaultCurrency = session?.user.defaultCurrency ?? session?.user.currency ?? 'EUR';
 
@@ -62,47 +61,45 @@ const FinancesPage: NextPageWithUser = () => {
   const openNew = useCallback(
     (type: FinanceEntryKind) => {
       setEditing(null);
-      setDraft({ type, currency: defaultCurrency, date: defaultDateFor(month, currentMonth) });
+      setEditingRecurrence(null);
+      setDraft({
+        type,
+        currency: defaultCurrency,
+        date: defaultDateFor(month, currentMonth),
+        month,
+      });
     },
     [defaultCurrency, month, currentMonth],
   );
 
-  const openEdit = useCallback((entry: FinanceEntry) => {
-    setEditing(entry);
-    setDraft({ id: entry.id, type: entry.type, currency: entry.currency, date: entry.date });
-  }, []);
+  const openEdit = useCallback(
+    (entry: FinanceEntry) => {
+      setEditingRecurrence(null);
+      setEditing(entry);
+      setDraft({ type: entry.type, currency: entry.currency, date: entry.date, month });
+    },
+    [month],
+  );
+
+  const openEditRecurrence = useCallback(
+    (recurrence: FinanceRecurrence) => {
+      setEditing(null);
+      setEditingRecurrence(recurrence);
+      setDraft({
+        type: recurrence.type,
+        currency: recurrence.currency,
+        date: defaultDateFor(month, currentMonth),
+        month,
+      });
+    },
+    [month, currentMonth],
+  );
 
   const close = useCallback(() => {
     setDraft(null);
     setEditing(null);
+    setEditingRecurrence(null);
   }, []);
-
-  const copyPrevious = useCallback(async () => {
-    try {
-      const previous = await apiUtils.finance.getMonth.fetch({
-        month: shiftMonth(month, -1),
-        timeZone,
-      });
-      if (!previous.length) {
-        toast.info(t('finance.copy_previous_empty'));
-        return;
-      }
-      const { count } = await createManyMutation.mutateAsync(
-        previous.map((e) => ({
-          type: e.type,
-          amount: e.amount,
-          currency: e.currency,
-          category: e.category,
-          description: e.description,
-          date: sameDayNextMonth(e.date),
-        })),
-      );
-      toast.success(t('finance.copy_previous_done', { count }));
-      refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : t('finance.error'));
-    }
-  }, [apiUtils, month, timeZone, createManyMutation, t, refresh]);
 
   const entries = useMemo(() => monthQuery.data ?? [], [monthQuery.data]);
   const groups = useMemo(
@@ -144,18 +141,6 @@ const FinancesPage: NextPageWithUser = () => {
         >
           <MonthStepper month={month} onChange={setMonth} />
           <p className="text-muted-foreground text-xs">{t('finance.private_note')}</p>
-
-          {0 === entries.length && !monthQuery.isPlaceholderData ? (
-            <Button
-              variant="outline"
-              className="h-11 self-start"
-              onClick={copyPrevious}
-              disabled={createManyMutation.isPending}
-            >
-              <CopyIcon className="mr-2 size-4" aria-hidden />
-              {t('finance.copy_previous')}
-            </Button>
-          ) : null}
 
           {groups.map((group) => {
             const isIncome = 'INCOME' === group.type;
@@ -199,7 +184,15 @@ const FinancesPage: NextPageWithUser = () => {
                             aria-label={`${t('finance.edit_label', { name })}: ${amount}`}
                           >
                             <span className="min-w-0">
-                              <span className="block truncate font-medium">{name}</span>
+                              <span className="flex items-center gap-1.5 font-medium">
+                                <span className="truncate">{name}</span>
+                                {entry.recurrenceId ? (
+                                  <RepeatIcon
+                                    className="text-muted-foreground size-3.5 shrink-0"
+                                    aria-label={t('finance.recurring_badge')}
+                                  />
+                                ) : null}
+                              </span>
                               <span className="text-muted-foreground block text-xs">
                                 {entry.description ? `${categoryName} · ` : ''}
                                 {toUIDate(entry.date)}
@@ -219,8 +212,57 @@ const FinancesPage: NextPageWithUser = () => {
               </section>
             );
           })}
+
+          <section className="bg-card rounded-xl border p-4" aria-labelledby="finance-recurring">
+            <h2 id="finance-recurring" className="flex items-center gap-2 text-base font-semibold">
+              <RepeatIcon className="text-muted-foreground size-4" aria-hidden />
+              {t('finance.recurring_title')}
+            </h2>
+            <p className="text-muted-foreground mb-2 text-xs">{t('finance.recurring_subtitle')}</p>
+            {recurrencesQuery.data?.length ? (
+              <ul className="flex flex-col">
+                {recurrencesQuery.data.map((recurrence) => {
+                  const categoryName = t(
+                    `finance.categories.${recurrence.type}.${recurrence.category}`,
+                  );
+                  const name = recurrence.description || categoryName;
+                  const amount = getCurrencyHelpersCached(recurrence.currency).toUIString(
+                    recurrence.amount,
+                  );
+                  const kind =
+                    'INCOME' === recurrence.type ? t('finance.income') : t('finance.investments');
+                  return (
+                    <li key={recurrence.id} className="border-t first:border-t-0">
+                      <button
+                        type="button"
+                        onClick={() => openEditRecurrence(recurrence)}
+                        className="hover:bg-muted/50 flex min-h-14 w-full items-center justify-between gap-3 rounded-md px-1 py-2 text-left transition-colors"
+                        aria-label={`${t('finance.edit_label', { name })}: ${amount}, ${t('finance.recurring_item', { day: recurrence.dayOfMonth })}`}
+                      >
+                        <span className="min-w-0">
+                          <span className="block truncate font-medium">{name}</span>
+                          <span className="text-muted-foreground block text-xs">
+                            {kind} · {t('finance.recurring_item', { day: recurrence.dayOfMonth })}
+                          </span>
+                        </span>
+                        <span className="shrink-0 font-semibold tabular-nums">{amount}</span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              <p className="text-muted-foreground text-sm">{t('finance.recurring_empty')}</p>
+            )}
+          </section>
         </div>
-        <FinanceEntryDrawer draft={draft} entry={editing} onClose={close} onSaved={refresh} />
+        <FinanceEntryDrawer
+          draft={draft}
+          entry={editing}
+          recurrence={editingRecurrence}
+          onClose={close}
+          onSaved={refresh}
+        />
       </MainLayout>
     </>
   );

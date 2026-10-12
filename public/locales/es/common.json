@@ -477,9 +477,6 @@
     "delete_description": "No se puede deshacer.",
     "empty_income": "Aún no has añadido ingresos este mes.",
     "empty_investments": "Aún no has añadido inversiones este mes.",
-    "copy_previous": "Copiar del mes anterior",
-    "copy_previous_done": "{{count}} movimientos copiados",
-    "copy_previous_empty": "El mes anterior no tiene movimientos",
     "total": "Total",
     "saved": "Guardado",
     "deleted": "Eliminado",
@@ -494,6 +491,8 @@
         "freelance": "Por cuenta propia",
         "rental": "Alquiler cobrado",
         "benefits": "Prestaciones",
+        "gift": "Regalo",
+        "compensation": "Compensación",
         "other": "Otros"
       },
       "INVESTMENT": {
@@ -506,6 +505,24 @@
         "other": "Otros"
       }
     },
-    "description_placeholder_investment": "Ej. Fondo indexado"
+    "description_placeholder_investment": "Ej. Fondo indexado",
+    "frequency": "Frecuencia",
+    "once": "Puntual",
+    "monthly": "Cada mes",
+    "pay_day": "Día del mes",
+    "pay_day_option": "Día {{day}}",
+    "recurring_hint": "Se añadirá automáticamente cada mes el día {{day}}, a partir de {{month}}, cuando llegue ese día.",
+    "recurring_short_months": "En los meses más cortos se usará el último día.",
+    "recurring_edit_hint": "Los cambios se aplican a los próximos meses; los movimientos ya añadidos no cambian.",
+    "recurring_title": "Recurrentes",
+    "recurring_subtitle": "Se añaden solos cada mes cuando llega su día.",
+    "recurring_empty": "No tienes ingresos ni inversiones recurrentes.",
+    "recurring_item": "Cada mes, día {{day}}",
+    "edit_recurrence": "Editar recurrente",
+    "stop_recurrence": "Dejar de repetir",
+    "stop_title": "¿Dejar de repetir?",
+    "stop_description": "No se añadirán más movimientos. Los que ya están se conservan.",
+    "stopped": "Ya no se repite",
+    "recurring_badge": "Recurrente"
   }
 }

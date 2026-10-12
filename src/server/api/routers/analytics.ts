@@ -6,6 +6,8 @@ import { monthBounds, monthSchema, timeZoneSchema } from '~/lib/finance';
 import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc';
 import { db } from '~/server/db';
 
+import { materializeRecurrences } from '../services/financeService';
+
 const EXCLUDED_SPLIT_TYPES = [SplitType.SETTLEMENT, SplitType.CURRENCY_CONVERSION];
 
 export const analyticsRouter = createTRPCRouter({
@@ -20,6 +22,7 @@ export const analyticsRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       const userId = ctx.session.user.id;
+      await materializeRecurrences(userId, input.timeZone);
       const months = monthRange(input.month, input.months);
       const dateRange = monthBounds(months[0]!, months.at(-1)!);
 

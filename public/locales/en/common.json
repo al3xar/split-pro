@@ -515,9 +515,6 @@
     "delete_description": "This cannot be undone.",
     "empty_income": "No income added this month yet.",
     "empty_investments": "No investments added this month yet.",
-    "copy_previous": "Copy from last month",
-    "copy_previous_done": "{{count}} entries copied",
-    "copy_previous_empty": "Last month has no entries",
     "total": "Total",
     "saved": "Saved",
     "deleted": "Deleted",
@@ -532,6 +529,8 @@
         "freelance": "Freelance",
         "rental": "Rental income",
         "benefits": "Benefits",
+        "gift": "Gift",
+        "compensation": "Compensation",
         "other": "Other"
       },
       "INVESTMENT": {
@@ -544,6 +543,24 @@
         "other": "Other"
       }
     },
-    "description_placeholder_investment": "e.g. Index fund"
+    "description_placeholder_investment": "e.g. Index fund",
+    "frequency": "Frequency",
+    "once": "One-off",
+    "monthly": "Every month",
+    "pay_day": "Day of the month",
+    "pay_day_option": "Day {{day}}",
+    "recurring_hint": "It will be added automatically every month on day {{day}}, starting {{month}}, once that day arrives.",
+    "recurring_short_months": "In shorter months, the last day is used.",
+    "recurring_edit_hint": "Changes apply to the coming months; entries already added stay as they are.",
+    "recurring_title": "Recurring",
+    "recurring_subtitle": "Added automatically every month when their day arrives.",
+    "recurring_empty": "You have no recurring income or investments.",
+    "recurring_item": "Every month, day {{day}}",
+    "edit_recurrence": "Edit recurring",
+    "stop_recurrence": "Stop repeating",
+    "stop_title": "Stop repeating?",
+    "stop_description": "No more entries will be added. The ones already added are kept.",
+    "stopped": "No longer repeating",
+    "recurring_badge": "Recurring"
   }
 }
