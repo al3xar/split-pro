@@ -284,7 +284,7 @@ export const AppDrawer: React.FC<AppDrawerProps> = (props) => {
         >
           {trigger}
         </DrawerTrigger>
-        <DrawerContent className={className}>
+        <DrawerContent className={className} aria-describedby={undefined}>
           <div className="overflow-auto p-4 pt-2">
             <div className="mb-4 flex items-center justify-between">
               {leftAction ? (
@@ -303,7 +303,7 @@ export const AppDrawer: React.FC<AppDrawerProps> = (props) => {
               ) : (
                 <div className="w-10" />
               )}
-              <p>{title}</p>
+              <DrawerTitle className="text-foreground text-base font-medium">{title}</DrawerTitle>
               {actionTitle ? (
                 !shouldCloseOnAction ? (
                   <Button

@@ -145,6 +145,15 @@
   --ring: hsl(224 71.4% 4.1%);
 
   --radius: 0.5rem;
+
+  /* Chart palette validated with the dataviz validator (light + dark, CVD-safe) */
+  --chart-income: #2a78d6;
+  --chart-expense: #eb6834;
+  --chart-positive: #2a78d6;
+  --chart-negative: #e34948;
+  --chart-grid: #e1e0d9;
+  --chart-axis: #c3c2b7;
+  --chart-track: hsl(220 14.3% 95.9%);
 }
 
 .dark {
@@ -174,12 +183,41 @@
 
   --border: hsl(215 27.9% 16.9%);
   --input: hsl(215 27.9% 16.9%);
-  --ring: hsl(221 39% 11%);
+  /* Was hsl(221 39% 11%), indistinguishable from the background: focus rings were invisible */
+  --ring: hsl(189 94% 43%);
+
+  --chart-income: #3987e5;
+  --chart-expense: #d95926;
+  --chart-positive: #3987e5;
+  --chart-negative: #e66767;
+  --chart-grid: hsl(215 27.9% 16.9%);
+  --chart-axis: hsl(215 20% 30%);
+  --chart-track: hsl(215 27.9% 12%);
 }
 
 @layer base {
   * {
     @apply border-border;
+  }
+
+  /* Visible keyboard focus everywhere, without affecting mouse/touch clicks */
+  a:focus-visible,
+  button:focus-visible,
+  [role='button']:focus-visible,
+  [tabindex]:focus-visible,
+  summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
   }
   body {
     @apply bg-background text-foreground h-full;

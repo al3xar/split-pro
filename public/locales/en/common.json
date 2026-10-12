@@ -234,7 +234,10 @@
         "cannot_change_group": "Cannot change group while editing",
         "remove_group": "Press delete to remove group",
         "search_friends": "Search friends, groups or add email"
-      }
+      },
+      "add_hint": "Choose who you share this expense with to see category, amount, payer and split options.",
+      "category_label": "Category: {{name}}",
+      "details_hint": "Type a description and an amount to choose who paid, how to split it, the date and the receipt."
     },
     "balance_list": {
       "are_settled_up": "are settled up",
@@ -367,7 +370,8 @@
     "add_expense": "Add Expense",
     "recurring": "Recurring",
     "balances": "Balances",
-    "groups": "Groups"
+    "groups": "Groups",
+    "analytics": "Analytics"
   },
   "recurrence": {
     "title": "Recurrence",
@@ -451,5 +455,95 @@
     "show_all_currencies": "Show all currencies",
     "today": "Today",
     "in_group": "In group"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "month_previous": "Previous month",
+    "month_next": "Next month",
+    "currency": "Currency",
+    "expenses": "Spending",
+    "expenses_hint": "Your share of shared expenses",
+    "household": "Household total: {{amount}}",
+    "income": "Income",
+    "savings": "Savings",
+    "savings_rate": "{{rate}} of your income",
+    "investments": "Invested",
+    "invested_share": "{{rate}} of your savings",
+    "vs_previous_up": "{{rate}} more than last month",
+    "vs_previous_down": "{{rate}} less than last month",
+    "no_previous": "No data for last month",
+    "no_income": "Add your income to see your savings",
+    "savings_negative": "You spent more than you earned",
+    "categories_title": "Spending by category",
+    "categories_empty": "No expenses this month.",
+    "share_of_total": "{{percent}} of total",
+    "show_details": "Show details for {{name}}",
+    "trend_title": "Income and spending",
+    "trend_subtitle": "Last {{count}} months",
+    "savings_title": "Monthly savings",
+    "savings_subtitle": "Income minus spending",
+    "show_table": "Show as table",
+    "show_chart": "Show chart",
+    "table": {
+      "month": "Month",
+      "income": "Income",
+      "expenses": "Spending",
+      "savings": "Savings",
+      "investments": "Invested"
+    },
+    "manage_finances": "Income & investments",
+    "manage_finances_hint": "Log your salary and investments to see how much you save each month.",
+    "empty_title": "No data yet",
+    "empty_body": "Add expenses or income to see your analytics."
+  },
+  "finance": {
+    "title": "Income & investments",
+    "income": "Income",
+    "investments": "Investments",
+    "add_income": "Add income",
+    "add_investment": "Add investment",
+    "edit_entry": "Edit entry",
+    "type": "Type",
+    "amount": "Amount",
+    "category": "Category",
+    "description": "Description",
+    "description_placeholder": "e.g. October salary",
+    "date": "Date",
+    "save": "Save",
+    "delete": "Delete",
+    "delete_title": "Delete this entry?",
+    "delete_description": "This cannot be undone.",
+    "empty_income": "No income added this month yet.",
+    "empty_investments": "No investments added this month yet.",
+    "copy_previous": "Copy from last month",
+    "copy_previous_done": "{{count}} entries copied",
+    "copy_previous_empty": "Last month has no entries",
+    "total": "Total",
+    "saved": "Saved",
+    "deleted": "Deleted",
+    "error": "Could not save",
+    "private_note": "Only you can see your income and investments.",
+    "edit_label": "Edit {{name}}",
+    "amount_required": "Enter an amount greater than zero",
+    "categories": {
+      "INCOME": {
+        "salary": "Salary",
+        "bonus": "Bonus",
+        "freelance": "Freelance",
+        "rental": "Rental income",
+        "benefits": "Benefits",
+        "other": "Other"
+      },
+      "INVESTMENT": {
+        "funds": "Funds",
+        "stocks": "Stocks",
+        "crypto": "Crypto",
+        "pension": "Pension plan",
+        "deposit": "Savings account",
+        "realEstate": "Real estate",
+        "other": "Other"
+      }
+    },
+    "description_placeholder_investment": "e.g. Index fund"
   }
 }

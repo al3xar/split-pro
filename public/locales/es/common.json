@@ -214,7 +214,10 @@
         "cannot_change_group": "No se puede cambiar el grupo mientras se edita",
         "remove_group": "Pulsa eliminar para quitar el grupo",
         "search_friends": "Buscar amigos, grupos o añadir correo electrónico"
-      }
+      },
+      "add_hint": "Elige con quién compartes el gasto para ver la categoría, el importe, quién paga y cómo se reparte.",
+      "category_label": "Categoría: {{name}}",
+      "details_hint": "Escribe la descripción y el importe para elegir quién paga, cómo se reparte, la fecha y el ticket."
     },
     "already_added": "Ya se añadió",
     "balance_list": {
@@ -329,7 +332,8 @@
     "add_expense": "Añadir Gasto",
     "balances": "Saldos",
     "groups": "Grupos",
-    "recurring": "Recurrente"
+    "recurring": "Recurrente",
+    "analytics": "Análisis"
   },
   "recurrence": {
     "cron_expression": "Expresión \"Cron\"",
@@ -413,5 +417,95 @@
     "show_all_currencies": "Mostrar todas las monedas",
     "today": "Hoy",
     "total_balance": "Saldo total"
+  },
+  "analytics": {
+    "title": "Análisis",
+    "month_previous": "Mes anterior",
+    "month_next": "Mes siguiente",
+    "currency": "Moneda",
+    "expenses": "Gastos",
+    "expenses_hint": "Tu parte de los gastos compartidos",
+    "household": "Total del hogar: {{amount}}",
+    "income": "Ingresos",
+    "savings": "Ahorro",
+    "savings_rate": "{{rate}} de tus ingresos",
+    "investments": "Invertido",
+    "invested_share": "{{rate}} de tu ahorro",
+    "vs_previous_up": "{{rate}} más que el mes anterior",
+    "vs_previous_down": "{{rate}} menos que el mes anterior",
+    "no_previous": "Sin datos del mes anterior",
+    "no_income": "Añade tus ingresos para ver tu ahorro",
+    "savings_negative": "Has gastado más de lo que has ingresado",
+    "categories_title": "Gasto por categoría",
+    "categories_empty": "No hay gastos este mes.",
+    "share_of_total": "{{percent}} del total",
+    "show_details": "Ver detalle de {{name}}",
+    "trend_title": "Ingresos y gastos",
+    "trend_subtitle": "Últimos {{count}} meses",
+    "savings_title": "Ahorro mensual",
+    "savings_subtitle": "Ingresos menos gastos",
+    "show_table": "Ver como tabla",
+    "show_chart": "Ver gráfica",
+    "table": {
+      "month": "Mes",
+      "income": "Ingresos",
+      "expenses": "Gastos",
+      "savings": "Ahorro",
+      "investments": "Invertido"
+    },
+    "manage_finances": "Ingresos e inversiones",
+    "manage_finances_hint": "Registra tu nómina y lo que inviertes para ver cuánto ahorras cada mes.",
+    "empty_title": "Aún no hay datos",
+    "empty_body": "Añade gastos o ingresos para ver tu análisis."
+  },
+  "finance": {
+    "title": "Ingresos e inversiones",
+    "income": "Ingresos",
+    "investments": "Inversiones",
+    "add_income": "Añadir ingreso",
+    "add_investment": "Añadir inversión",
+    "edit_entry": "Editar movimiento",
+    "type": "Tipo",
+    "amount": "Importe",
+    "category": "Categoría",
+    "description": "Descripción",
+    "description_placeholder": "Ej. Nómina de octubre",
+    "date": "Fecha",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "delete_title": "¿Eliminar este movimiento?",
+    "delete_description": "No se puede deshacer.",
+    "empty_income": "Aún no has añadido ingresos este mes.",
+    "empty_investments": "Aún no has añadido inversiones este mes.",
+    "copy_previous": "Copiar del mes anterior",
+    "copy_previous_done": "{{count}} movimientos copiados",
+    "copy_previous_empty": "El mes anterior no tiene movimientos",
+    "total": "Total",
+    "saved": "Guardado",
+    "deleted": "Eliminado",
+    "error": "No se ha podido guardar",
+    "private_note": "Solo tú ves tus ingresos e inversiones.",
+    "edit_label": "Editar {{name}}",
+    "amount_required": "Introduce un importe mayor que cero",
+    "categories": {
+      "INCOME": {
+        "salary": "Nómina",
+        "bonus": "Paga extra / bonus",
+        "freelance": "Por cuenta propia",
+        "rental": "Alquiler cobrado",
+        "benefits": "Prestaciones",
+        "other": "Otros"
+      },
+      "INVESTMENT": {
+        "funds": "Fondos",
+        "stocks": "Acciones",
+        "crypto": "Cripto",
+        "pension": "Plan de pensiones",
+        "deposit": "Cuenta remunerada",
+        "realEstate": "Inmuebles",
+        "other": "Otros"
+      }
+    },
+    "description_placeholder_investment": "Ej. Fondo indexado"
   }
 }

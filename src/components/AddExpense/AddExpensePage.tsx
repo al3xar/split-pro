@@ -280,9 +280,9 @@ export const AddOrEditExpensePage: React.FC<{
         <Button variant="ghost" className="text-primary px-0" onClick={onBackButtonPress}>
           {t('actions.cancel')}
         </Button>
-        <div className="text-center">
+        <h1 className="text-center text-base font-semibold">
           {expenseId ? t('actions.edit_expense') : t('actions.add_expense')}
-        </div>
+        </h1>
         <Button
           variant="ghost"
           className="text-primary px-0"
@@ -300,13 +300,24 @@ export const AddOrEditExpensePage: React.FC<{
       </div>
       <UserInput isEditing={Boolean(expenseId)} />
       {showFriends || (1 === participants.length && !group) ? (
-        <SelectUserOrGroup enableSendingInvites={enableSendingInvites} />
+        <>
+          {1 === participants.length && !group ? (
+            <p
+              className="bg-muted/60 text-muted-foreground rounded-lg px-3 py-2 text-sm"
+              role="note"
+            >
+              {t('expense_details.add_expense_details.add_hint')}
+            </p>
+          ) : null}
+          <SelectUserOrGroup enableSendingInvites={enableSendingInvites} />
+        </>
       ) : (
         <>
           <div className="mt-4 flex gap-2 sm:mt-10">
             <CategoryPicker category={category} onCategoryPick={setCategory} />
             <Input
               placeholder={t('expense_details.add_expense_details.description_placeholder')}
+              aria-label={t('expense_details.add_expense_details.description_placeholder')}
               value={description}
               onChange={handleDescriptionChange}
               className="text-lg placeholder:text-sm"
@@ -317,6 +328,7 @@ export const AddOrEditExpensePage: React.FC<{
             <CurrencyPicker currentCurrency={currency} onCurrencyPick={onCurrencyPick} />
             <CurrencyInput
               placeholder={t('expense_details.add_expense_details.amount_placeholder')}
+              aria-label={t('expense_details.add_expense_details.amount_placeholder')}
               currency={currency}
               strValue={amtStr}
               allowNegative
@@ -382,7 +394,11 @@ export const AddOrEditExpensePage: React.FC<{
                   </div>
                 </div>
               </>
-            ) : null}
+            ) : (
+              <p className="text-muted-foreground mt-6 px-2 text-center text-sm" role="note">
+                {t('expense_details.add_expense_details.details_hint')}
+              </p>
+            )}
           </div>
           <div className="flex items-center justify-evenly px-4 lg:px-0">
             {!expenseId && (

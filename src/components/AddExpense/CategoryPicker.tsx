@@ -11,14 +11,32 @@ export const CategoryPicker: React.FC<{
   onCategoryPick: (category: string) => void;
 }> = ({ category, onCategoryPick }) => {
   const { t } = useTranslation('categories');
+  const { t: tCommon } = useTranslation();
+
+  const categoryName = useMemo(() => {
+    if (category in CATEGORIES) {
+      return t(`categories_list.${category}.name`);
+    }
+    const section = Object.entries(CATEGORIES).find(([, items]) =>
+      (items as readonly string[]).includes(category),
+    )?.[0];
+    return section ? t(`categories_list.${section}.items.${category}`) : category;
+  }, [category, t]);
 
   const trigger = useMemo(
     () => (
-      <div className="flex w-[73px] cursor-pointer justify-center rounded-lg border py-2">
-        <CategoryIcon category={category} size={20} />
-      </div>
+      <button
+        type="button"
+        className="hover:bg-muted flex h-9 max-w-[8.5rem] shrink-0 items-center gap-1.5 rounded-lg border px-2.5 transition-colors"
+        aria-label={tCommon('expense_details.add_expense_details.category_label', {
+          name: categoryName,
+        })}
+      >
+        <CategoryIcon category={category} size={18} aria-hidden className="shrink-0" />
+        <span className="truncate text-xs">{categoryName}</span>
+      </button>
     ),
-    [category],
+    [category, categoryName, tCommon],
   );
 
   return (

@@ -140,7 +140,9 @@ export const SelectUserOrGroup: React.FC<{
                 : null}
             </div>
           ) : (
-            <div>{t('expense_details.add_expense_details.select_user_or_group.note')}</div>
+            <p className="text-muted-foreground text-xs">
+              {t('expense_details.add_expense_details.select_user_or_group.note')}
+            </p>
           )}
         </div>
         <div className="flex flex-wrap justify-center gap-x-4">
