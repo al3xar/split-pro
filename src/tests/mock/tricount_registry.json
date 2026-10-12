@@ -1,0 +1,275 @@
+{
+  "Response": [
+    {
+      "Registry": {
+        "id": 1,
+        "title": "Casa",
+        "currency": "EUR",
+        "memberships": [
+          {
+            "RegistryMembershipNonUser": {
+              "alias": {
+                "display_name": "Ana"
+              }
+            }
+          },
+          {
+            "RegistryMembershipNonUser": {
+              "alias": {
+                "display_name": "Luis"
+              }
+            }
+          }
+        ],
+        "all_registry_entry": [
+          {
+            "RegistryEntry": {
+              "id": 1,
+              "uuid": "u-rent",
+              "type_transaction": "NORMAL",
+              "description": "Alquiler octubre",
+              "date": "2026-10-01 10:00:00.000000",
+              "category": "UNCATEGORIZED",
+              "category_custom": "",
+              "amount": {
+                "value": "-900.00",
+                "currency": "EUR"
+              },
+              "membership_owned": {
+                "RegistryMembershipNonUser": {
+                  "alias": {
+                    "display_name": "Ana"
+                  }
+                }
+              },
+              "allocations": [
+                {
+                  "membership": {
+                    "RegistryMembershipNonUser": {
+                      "alias": {
+                        "display_name": "Ana"
+                      }
+                    }
+                  },
+                  "amount": {
+                    "value": "-450.00",
+                    "currency": "EUR"
+                  },
+                  "type": "AMOUNT"
+                },
+                {
+                  "membership": {
+                    "RegistryMembershipNonUser": {
+                      "alias": {
+                        "display_name": "Luis"
+                      }
+                    }
+                  },
+                  "amount": {
+                    "value": "-450.00",
+                    "currency": "EUR"
+                  },
+                  "type": "AMOUNT"
+                }
+              ]
+            }
+          },
+          {
+            "RegistryEntry": {
+              "id": 1,
+              "uuid": "u-food",
+              "type_transaction": "NORMAL",
+              "description": "Mercadona",
+              "date": "2026-10-03 18:30:00.000000",
+              "category": "FOOD_AND_DRINKS",
+              "category_custom": "",
+              "amount": {
+                "value": "-60.50",
+                "currency": "EUR"
+              },
+              "membership_owned": {
+                "RegistryMembershipNonUser": {
+                  "alias": {
+                    "display_name": "Luis"
+                  }
+                }
+              },
+              "allocations": [
+                {
+                  "membership": {
+                    "RegistryMembershipNonUser": {
+                      "alias": {
+                        "display_name": "Ana"
+                      }
+                    }
+                  },
+                  "amount": {
+                    "value": "-30.25",
+                    "currency": "EUR"
+                  },
+                  "type": "AMOUNT"
+                },
+                {
+                  "membership": {
+                    "RegistryMembershipNonUser": {
+                      "alias": {
+                        "display_name": "Luis"
+                      }
+                    }
+                  },
+                  "amount": {
+                    "value": "-30.25",
+                    "currency": "EUR"
+                  },
+                  "type": "AMOUNT"
+                }
+              ]
+            }
+          },
+          {
+            "RegistryEntry": {
+              "id": 1,
+              "uuid": "u-bal",
+              "type_transaction": "BALANCE",
+              "description": "Bizum",
+              "date": "2026-10-05 09:00:00.000000",
+              "category": "UNCATEGORIZED",
+              "category_custom": "",
+              "amount": {
+                "value": "-100.00",
+                "currency": "EUR"
+              },
+              "membership_owned": {
+                "RegistryMembershipNonUser": {
+                  "alias": {
+                    "display_name": "Luis"
+                  }
+                }
+              },
+              "allocations": [
+                {
+                  "membership": {
+                    "RegistryMembershipNonUser": {
+                      "alias": {
+                        "display_name": "Ana"
+                      }
+                    }
+                  },
+                  "amount": {
+                    "value": "-100.00",
+                    "currency": "EUR"
+                  },
+                  "type": "AMOUNT"
+                }
+              ]
+            }
+          },
+          {
+            "RegistryEntry": {
+              "id": 1,
+              "uuid": "u-inc",
+              "type_transaction": "INCOME",
+              "description": "Devolución fianza",
+              "date": "2026-10-06 09:00:00.000000",
+              "category": "UNCATEGORIZED",
+              "category_custom": "",
+              "amount": {
+                "value": "-40.00",
+                "currency": "EUR"
+              },
+              "membership_owned": {
+                "RegistryMembershipNonUser": {
+                  "alias": {
+                    "display_name": "Ana"
+                  }
+                }
+              },
+              "allocations": [
+                {
+                  "membership": {
+                    "RegistryMembershipNonUser": {
+                      "alias": {
+                        "display_name": "Ana"
+                      }
+                    }
+                  },
+                  "amount": {
+                    "value": "-20.00",
+                    "currency": "EUR"
+                  },
+                  "type": "AMOUNT"
+                },
+                {
+                  "membership": {
+                    "RegistryMembershipNonUser": {
+                      "alias": {
+                        "display_name": "Luis"
+                      }
+                    }
+                  },
+                  "amount": {
+                    "value": "-20.00",
+                    "currency": "EUR"
+                  },
+                  "type": "AMOUNT"
+                }
+              ]
+            }
+          },
+          {
+            "RegistryEntry": {
+              "id": 1,
+              "uuid": "u-split3",
+              "type_transaction": "NORMAL",
+              "description": "Cena",
+              "date": "2026-10-07 21:00:00.000000",
+              "category": "RESTAURANTS",
+              "category_custom": "",
+              "amount": {
+                "value": "-10.00",
+                "currency": "EUR"
+              },
+              "membership_owned": {
+                "RegistryMembershipNonUser": {
+                  "alias": {
+                    "display_name": "Ana"
+                  }
+                }
+              },
+              "allocations": [
+                {
+                  "membership": {
+                    "RegistryMembershipNonUser": {
+                      "alias": {
+                        "display_name": "Ana"
+                      }
+                    }
+                  },
+                  "amount": {
+                    "value": "-3.33",
+                    "currency": "EUR"
+                  },
+                  "type": "AMOUNT"
+                },
+                {
+                  "membership": {
+                    "RegistryMembershipNonUser": {
+                      "alias": {
+                        "display_name": "Luis"
+                      }
+                    }
+                  },
+                  "amount": {
+                    "value": "-6.66",
+                    "currency": "EUR"
+                  },
+                  "type": "AMOUNT"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
