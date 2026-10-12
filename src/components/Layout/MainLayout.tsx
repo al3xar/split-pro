@@ -1,5 +1,6 @@
 import {
   PresentationChartBarIcon as SolidAnalyticsIcon,
+  HomeIcon as SolidHomeIcon,
   ListBulletIcon as SolidListBulletIcon,
   PlusCircleIcon as SolidPlusCircleIcon,
   ChartPieIcon as SolidScaleIcon,
@@ -52,6 +53,12 @@ const MainLayout: React.FC<MainLayoutProps> = ({
               {t?.('meta.application_name') ?? 'SplitPro'}
             </span>
           </Link>
+          <NavItemDesktop
+            title={t?.('navigation.household') ?? 'Household'}
+            Icon={SolidHomeIcon}
+            link="/household"
+            currentPath={currentPath}
+          />
           <NavItemDesktop
             title={t?.('navigation.balances') ?? 'Balances'}
             Icon={SolidScaleIcon}
@@ -121,6 +128,12 @@ const MainLayout: React.FC<MainLayoutProps> = ({
         className="bg-background/80 fixed bottom-0 flex w-full justify-between border-t px-1 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-xs backdrop-blur-lg lg:hidden"
       >
         <NavItem
+          title={t?.('navigation.household') ?? 'Household'}
+          Icon={SolidHomeIcon}
+          link="/household"
+          currentPath={currentPath}
+        />
+        <NavItem
           title={t?.('navigation.balances') ?? 'Balances'}
           Icon={SolidScaleIcon}
           link="/balances"
@@ -142,12 +155,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({
           title={t?.('navigation.analytics') ?? 'Analytics'}
           Icon={SolidAnalyticsIcon}
           link="/analytics"
-          currentPath={currentPath}
-        />
-        <NavItem
-          title={t?.('navigation.activity') ?? 'Activity'}
-          Icon={SolidListBulletIcon}
-          link="/activity"
           currentPath={currentPath}
         />
         <NavItem

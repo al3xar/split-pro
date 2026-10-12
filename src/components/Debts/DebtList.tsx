@@ -1,7 +1,10 @@
 import { CheckIcon, ChevronDownIcon } from 'lucide-react';
+import { useTranslation } from 'next-i18next';
 import React, { useCallback, useMemo, useState } from 'react';
 
 import { useTranslationWithUtils } from '~/hooks/useTranslationWithUtils';
+import { categorySection } from '~/lib/analytics';
+import { CATEGORIES } from '~/lib/category';
 import { type DebtItem, type DebtPriority } from '~/lib/debts';
 import { cn } from '~/lib/utils';
 import { type RouterOutputs } from '~/utils/api';
@@ -105,6 +108,83 @@ export const DebtSummary: React.FC<{
   );
 };
 
+const groupByCategory = (items: DebtItem[]) => {
+  const byCategory = new Map<string, DebtItem[]>();
+  items.forEach((item) =>
+    byCategory.set(item.category, [...(byCategory.get(item.category) ?? []), item]),
+  );
+  return [...byCategory.entries()].map(([category, list]) => ({ category, items: list }));
+};
+
+const useCategoryName = () => {
+  const { t } = useTranslation('categories');
+  return useCallback(
+    (category: string) => {
+      if (category in CATEGORIES) {
+        return t(`categories_list.${category}.name`);
+      }
+      const section = categorySection(category);
+      return t(`categories_list.${section}.items.${category}`);
+    },
+    [t],
+  );
+};
+
+/** Several debts of one category folded into a summary row that expands to the expenses. */
+const CategoryDebts: React.FC<{
+  category: string;
+  items: DebtItem[];
+  data: PairDebtsData;
+  currency: string;
+}> = ({ category, items, data, currency }) => {
+  const { t, getCurrencyHelpersCached } = useTranslationWithUtils();
+  const categoryName = useCategoryName();
+  const [open, setOpen] = useState(false);
+  const remaining = items.reduce((sum, i) => sum + i.remaining, 0n);
+  const name = categoryName(category);
+  const amount = getCurrencyHelpersCached(currency).toUIString(remaining);
+  const isSettled = 0n === remaining;
+
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className={cn(
+          'hover:bg-muted/50 flex min-h-12 w-full items-center gap-3 rounded-md py-2 text-left',
+          isSettled && 'opacity-60',
+        )}
+      >
+        <CategoryIcon category={category} size={18} className="text-muted-foreground shrink-0" />
+        <span className="min-w-0 flex-1">
+          <span className="block truncate text-sm font-medium">{name}</span>
+          <span className="text-muted-foreground block text-xs">
+            {t('debts.expenses_count', { count: items.length })}
+          </span>
+        </span>
+        <span className="shrink-0 text-sm font-semibold tabular-nums">
+          {isSettled ? t('debts.settled') : amount}
+        </span>
+        <ChevronDownIcon
+          className={cn(
+            'text-muted-foreground size-4 shrink-0 transition-transform',
+            open && 'rotate-180',
+          )}
+          aria-hidden
+        />
+      </button>
+      {open ? (
+        <div className="divide-border border-border ml-7 divide-y border-l pl-3">
+          {items.map((item) => (
+            <DebtRow key={item.expenseId} item={item} data={data} currency={currency} />
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+};
+
 /** Pending debts grouped by priority, with settled ones folded away. */
 export const DebtList: React.FC<{ data: PairDebtsData; currency: string }> = ({
   data,
@@ -141,9 +221,19 @@ export const DebtList: React.FC<{ data: PairDebtsData; currency: string }> = ({
               </span>
             </h3>
             <div className="divide-border divide-y">
-              {visible.map((item) => (
-                <DebtRow key={item.expenseId} item={item} data={data} currency={currency} />
-              ))}
+              {groupByCategory(visible).map(({ category, items }) =>
+                1 === items.length ? (
+                  <DebtRow key={category} item={items[0]!} data={data} currency={currency} />
+                ) : (
+                  <CategoryDebts
+                    key={category}
+                    category={category}
+                    items={items}
+                    data={data}
+                    currency={currency}
+                  />
+                ),
+              )}
             </div>
           </section>
         );

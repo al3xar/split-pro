@@ -372,7 +372,8 @@
     "recurring": "Recurring",
     "balances": "Balances",
     "groups": "Groups",
-    "analytics": "Analytics"
+    "analytics": "Analytics",
+    "household": "Household"
   },
   "recurrence": {
     "title": "Recurrence",
@@ -582,6 +583,33 @@
     "changed": "The expenses changed, check the total",
     "all": "All",
     "quick_select": "Quick select",
-    "total": "Total"
+    "total": "Total",
+    "expenses_count_one": "{{count}} expense",
+    "expenses_count_other": "{{count}} expenses"
+  },
+  "household": {
+    "title": "Household",
+    "period": "Period",
+    "periods": {
+      "month": "This month",
+      "quarter": "3 months",
+      "year": "This year",
+      "all": "All"
+    },
+    "pending_title": "Pending with {{name}}",
+    "spending_title": "Household spending",
+    "more_than_previous": "{{rate}} more than the previous period",
+    "less_than_previous": "{{rate}} less than the previous period",
+    "no_expenses": "No expenses in this period.",
+    "who_paid": "Who has paid",
+    "what_on": "What {{name}} spent on",
+    "other": "Other",
+    "recent": "Latest expenses",
+    "see_group": "See group",
+    "empty_title": "Set up your household",
+    "empty_body": "Mark a group as Household in its settings, or import your Tricount, to see what is pending and where the money goes.",
+    "choose_group": "Choose a group",
+    "import_tricount": "Import from Tricount",
+    "what_on_you": "What you spent on"
   }
 }

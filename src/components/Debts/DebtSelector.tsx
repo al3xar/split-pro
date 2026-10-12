@@ -20,7 +20,7 @@ import { DebtRow, DebtSummary, debtorItemsByPriority } from './DebtList';
  * (e.g. groups with simplified debts).
  */
 export const DebtSelector: React.FC<{
-  friend: User;
+  friend: Pick<User, 'id' | 'name' | 'email' | 'image'>;
   groupId: number | null;
   currency: string;
   onDone: () => void;

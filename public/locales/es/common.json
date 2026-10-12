@@ -334,7 +334,8 @@
     "balances": "Saldos",
     "groups": "Grupos",
     "recurring": "Recurrente",
-    "analytics": "Análisis"
+    "analytics": "Análisis",
+    "household": "Hogar"
   },
   "recurrence": {
     "cron_expression": "Expresión \"Cron\"",
@@ -544,6 +545,33 @@
     "changed": "Los gastos han cambiado, revisa el total",
     "all": "Todas",
     "quick_select": "Selección rápida",
-    "total": "Total"
+    "total": "Total",
+    "expenses_count_one": "{{count}} gasto",
+    "expenses_count_other": "{{count}} gastos"
+  },
+  "household": {
+    "title": "Hogar",
+    "period": "Periodo",
+    "periods": {
+      "month": "Este mes",
+      "quarter": "3 meses",
+      "year": "Este año",
+      "all": "Todo"
+    },
+    "pending_title": "Pendiente con {{name}}",
+    "spending_title": "Gasto del hogar",
+    "more_than_previous": "{{rate}} más que el periodo anterior",
+    "less_than_previous": "{{rate}} menos que el periodo anterior",
+    "no_expenses": "No hay gastos en este periodo.",
+    "who_paid": "Quién ha pagado",
+    "what_on": "En qué ha gastado {{name}}",
+    "other": "Otros",
+    "recent": "Últimos gastos",
+    "see_group": "Ver grupo",
+    "empty_title": "Configura tu hogar",
+    "empty_body": "Marca un grupo como Hogar en sus ajustes, o importa tu Tricount, para ver qué queda pendiente y en qué se va el dinero.",
+    "choose_group": "Elegir un grupo",
+    "import_tricount": "Importar de Tricount",
+    "what_on_you": "En qué has gastado tú"
   }
 }

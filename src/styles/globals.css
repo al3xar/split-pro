@@ -154,6 +154,12 @@
   --chart-grid: #e1e0d9;
   --chart-axis: #c3c2b7;
   --chart-track: hsl(220 14.3% 95.9%);
+  --chart-cat-1: #2a78d6;
+  --chart-cat-2: #eb6834;
+  --chart-cat-3: #1baf7a;
+  --chart-cat-4: #eda100;
+  --chart-cat-5: #e87ba4;
+  --chart-other: #898781;
 }
 
 .dark {
@@ -193,6 +199,12 @@
   --chart-grid: hsl(215 27.9% 16.9%);
   --chart-axis: hsl(215 20% 30%);
   --chart-track: hsl(215 27.9% 12%);
+  --chart-cat-1: #3987e5;
+  --chart-cat-2: #d95926;
+  --chart-cat-3: #199e70;
+  --chart-cat-4: #c98500;
+  --chart-cat-5: #d55181;
+  --chart-other: #898781;
 }
 
 @layer base {
