@@ -65,6 +65,7 @@ model User {
   friendDefaultSplitsB FriendDefaultSplit[] @relation("FriendDefaultSplitUserB")
   sessions             Session[]
   hiddenFriendIds      Int[]                @default([])
+  financeEntries       FinanceEntry[]
 
   @@schema("public")
 }
@@ -329,6 +330,31 @@ view BalanceView {
   user   User   @relation("UserBalanceView", fields: [userId], references: [id], onDelete: Cascade)
   friend User   @relation("FriendBalanceView", fields: [friendId], references: [id], onDelete: Cascade)
   group  Group? @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@schema("public")
+}
+
+/// Personal income and investments, used by the analytics screen. Private to each user.
+model FinanceEntry {
+  id          Int              @id @default(autoincrement())
+  userId      Int
+  type        FinanceEntryType
+  amount      BigInt
+  currency    String
+  category    String
+  description String           @default("")
+  date        DateTime
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+  @@schema("public")
+}
+
+enum FinanceEntryType {
+  INCOME
+  INVESTMENT
 
   @@schema("public")
 }
