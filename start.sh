@@ -44,5 +44,5 @@ fi
 
 echo "Starting web server"
 
-node server.js
+exec node server.js
 
