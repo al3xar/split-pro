@@ -10,6 +10,7 @@ import { BigMath } from '~/utils/numbers';
 import { useSession } from 'next-auth/react';
 import { useTranslationWithUtils } from '~/hooks/useTranslationWithUtils';
 import type { MinimalBalance } from '~/types/balance.types';
+import { DebtSelector } from '../Debts/DebtSelector';
 import { EntityAvatar } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { CurrencyInput } from '../ui/currency-input';
@@ -38,6 +39,7 @@ export const SettleUp: React.FC<
     );
   }
 
+  const [open, setOpen] = useState(false);
   const [balanceToSettle, setBalanceToSettle] = useState<MinimalBalance | undefined>(
     1 < balances.length ? undefined : balances[0],
   );
@@ -90,6 +92,8 @@ export const SettleUp: React.FC<
         onSuccess: () => {
           utils.user.invalidate().catch(console.error);
           utils.expense.invalidate().catch(console.error);
+          utils.debts.invalidate().catch(console.error);
+          setOpen(false);
         },
         onError: (error) => {
           console.error('Error while saving expense:', error);
@@ -129,16 +133,14 @@ export const SettleUp: React.FC<
   return (
     <AppDrawer
       trigger={children}
+      open={open}
+      onOpenChange={setOpen}
       disableTrigger={!balances?.length}
       leftAction={t('actions.back')}
       leftActionOnClick={onBackClick}
       shouldCloseOnLeftAction={false}
       title={balanceToSettle ? t('ui.settle_up_name') : t('ui.select_balance')}
       className="h-[70vh]"
-      actionTitle={t('actions.save')}
-      actionDisabled={!balanceToSettle || !amount}
-      actionOnClick={saveExpense}
-      shouldCloseOnAction
     >
       {!balanceToSettle ? (
         <div>
@@ -153,29 +155,44 @@ export const SettleUp: React.FC<
           ))}
         </div>
       ) : (
-        <div className="mt-10 flex flex-col items-center gap-6">
-          <div className="flex flex-col items-center">
-            <div className="flex items-center gap-5">
-              <EntityAvatar entity={isCurrentUserPaying ? currentUser : friend} />
-              <ArrowRightIcon className="h-6 w-6 text-gray-600" />
-              <EntityAvatar entity={isCurrentUserPaying ? friend : currentUser} />
+        <DebtSelector
+          friend={friend}
+          groupId={balanceToSettle.groupId}
+          currency={balanceToSettle.currency}
+          onDone={() => setOpen(false)}
+          fallback={
+            <div className="flex flex-col items-center gap-6">
+              <div className="mt-10 flex flex-col items-center gap-6">
+                <div className="flex flex-col items-center">
+                  <div className="flex items-center gap-5">
+                    <EntityAvatar entity={isCurrentUserPaying ? currentUser : friend} />
+                    <ArrowRightIcon className="h-6 w-6 text-gray-600" />
+                    <EntityAvatar entity={isCurrentUserPaying ? friend : currentUser} />
+                  </div>
+                  <p className="mt-2 text-center text-sm text-gray-400">
+                    {isCurrentUserPaying
+                      ? `${t('actors.you')} ${t('ui.expense.you.pay')} ${displayName(friend)}`
+                      : `${displayName(friend)} ${t('ui.expense.user.pay')} ${t('actors.you')}`}
+                  </p>
+                  {balanceToSettle.groupName ? (
+                    <p className="mt-1 text-center text-xs text-gray-500">
+                      {balanceToSettle.groupName}
+                    </p>
+                  ) : null}
+                </div>
+                <CurrencyInput
+                  currency={balanceToSettle.currency}
+                  strValue={amountStr}
+                  className="mx-auto mt-4 w-[150px] text-center text-lg"
+                  onValueChange={onCurrencyInputValueChange}
+                />
+              </div>
+              <Button className="h-11 w-full" disabled={!amount} onClick={saveExpense}>
+                {t('actions.save')}
+              </Button>
             </div>
-            <p className="mt-2 text-center text-sm text-gray-400">
-              {isCurrentUserPaying
-                ? `${t('actors.you')} ${t('ui.expense.you.pay')} ${displayName(friend)}`
-                : `${displayName(friend)} ${t('ui.expense.user.pay')} ${t('actors.you')}`}
-            </p>
-            {balanceToSettle.groupName ? (
-              <p className="mt-1 text-center text-xs text-gray-500">{balanceToSettle.groupName}</p>
-            ) : null}
-          </div>
-          <CurrencyInput
-            currency={balanceToSettle.currency}
-            strValue={amountStr}
-            className="mx-auto mt-4 w-[150px] text-center text-lg"
-            onValueChange={onCurrencyInputValueChange}
-          />
-        </div>
+          }
+        />
       )}
     </AppDrawer>
   );

@@ -7,7 +7,9 @@ import { DEFAULT_CATEGORY } from '~/lib/category';
 import { api } from '~/utils/api';
 import { BigMath } from '~/utils/numbers';
 
+import { DebtSelector } from '../Debts/DebtSelector';
 import { EntityAvatar } from '../ui/avatar';
+import { Button } from '../ui/button';
 import { CurrencyInput } from '../ui/currency-input';
 import { AppDrawer } from '../ui/drawer';
 import { useSession } from 'next-auth/react';
@@ -22,6 +24,7 @@ export const GroupSettleUp: React.FC<{
 }> = ({ amount: _amount, currency, friend, user, children, groupId }) => {
   const { data } = useSession();
   const { displayName, t, getCurrencyHelpersCached } = useTranslationWithUtils();
+  const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<bigint>(BigMath.abs(_amount));
   const [amountStr, setAmountStr] = useState(getCurrencyHelpersCached(currency).toUIString(amount));
 
@@ -71,6 +74,8 @@ export const GroupSettleUp: React.FC<{
       {
         onSuccess: () => {
           utils.group.invalidate().catch(console.error);
+          utils.debts.invalidate().catch(console.error);
+          setOpen(false);
         },
         onError: (error) => {
           console.error('Error while saving expense:', error);
@@ -83,34 +88,43 @@ export const GroupSettleUp: React.FC<{
   return (
     <AppDrawer
       trigger={children}
+      open={open}
+      onOpenChange={setOpen}
       leftAction={t('actions.back')}
       title={t('ui.settlement')}
-      actionTitle={t('actions.save')}
-      actionOnClick={saveExpense}
-      actionDisabled={!amount}
       className="h-[70vh]"
-      shouldCloseOnAction
     >
-      <div className="mt-10 flex flex-col items-center gap-6">
-        <div className="flex flex-col items-center">
-          <div className="flex items-center gap-5">
-            <EntityAvatar entity={sender} />
-            <ArrowRightIcon className="h-6 w-6 text-gray-600" />
-            <EntityAvatar entity={receiver} />
+      <DebtSelector
+        friend={user.id === data?.user.id ? friend : user}
+        groupId={groupId}
+        currency={currency}
+        onDone={() => setOpen(false)}
+        fallback={
+          <div className="mt-10 flex flex-col items-center gap-6">
+            <div className="flex flex-col items-center">
+              <div className="flex items-center gap-5">
+                <EntityAvatar entity={sender} />
+                <ArrowRightIcon className="h-6 w-6 text-gray-600" />
+                <EntityAvatar entity={receiver} />
+              </div>
+              <p className="mt-2 text-center text-sm text-gray-400">
+                {displayName(sender, data?.user.id)}{' '}
+                {t(`ui.expense.${sender.id === data?.user.id ? 'you' : 'user'}.pay`)}{' '}
+                {displayName(receiver, data?.user.id)}
+              </p>
+            </div>
+            <CurrencyInput
+              currency={currency}
+              strValue={amountStr}
+              className="mx-auto mt-4 w-[150px] text-center text-lg"
+              onValueChange={onCurrencyInputValueChange}
+            />
+            <Button className="h-11 w-full" disabled={!amount} onClick={saveExpense}>
+              {t('actions.save')}
+            </Button>
           </div>
-          <p className="mt-2 text-center text-sm text-gray-400">
-            {displayName(sender, data?.user.id)}{' '}
-            {t(`ui.expense.${sender.id === data?.user.id ? 'you' : 'user'}.pay`)}{' '}
-            {displayName(receiver, data?.user.id)}
-          </p>
-        </div>
-        <CurrencyInput
-          currency={currency}
-          strValue={amountStr}
-          className="mx-auto mt-4 w-[150px] text-center text-lg"
-          onValueChange={onCurrencyInputValueChange}
-        />
-      </div>
+        }
+      />
     </AppDrawer>
   );
 };

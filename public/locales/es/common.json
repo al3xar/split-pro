@@ -524,5 +524,25 @@
     "stop_description": "No se añadirán más movimientos. Los que ya están se conservan.",
     "stopped": "Ya no se repite",
     "recurring_badge": "Recurrente"
+  },
+  "debts": {
+    "priority": {
+      "1": "Vivienda y fijos",
+      "2": "Comida",
+      "3": "Otros",
+      "4": "Ocio"
+    },
+    "remaining_of": "quedan {{remaining}} de {{amount}}",
+    "settled": "Saldado",
+    "compensated": "Compensado",
+    "settled_count": "{{count}} saldados",
+    "register_payment": "Registrar pago de {{amount}}",
+    "you_owe": "Debes {{amount}}",
+    "owes_you": "{{name}} te debe {{amount}}",
+    "even": "Estáis en paz",
+    "changed": "Los gastos han cambiado, revisa el total",
+    "all": "Todas",
+    "quick_select": "Selección rápida",
+    "total": "Total"
   }
 }

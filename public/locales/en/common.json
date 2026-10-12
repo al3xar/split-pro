@@ -562,5 +562,25 @@
     "stop_description": "No more entries will be added. The ones already added are kept.",
     "stopped": "No longer repeating",
     "recurring_badge": "Recurring"
+  },
+  "debts": {
+    "priority": {
+      "1": "Housing & fixed",
+      "2": "Food",
+      "3": "Other",
+      "4": "Leisure"
+    },
+    "remaining_of": "{{remaining}} left of {{amount}}",
+    "settled": "Settled",
+    "compensated": "Compensated",
+    "settled_count": "{{count}} settled",
+    "register_payment": "Register payment of {{amount}}",
+    "you_owe": "You owe {{amount}}",
+    "owes_you": "{{name}} owes you {{amount}}",
+    "even": "You are even",
+    "changed": "The expenses changed, check the total",
+    "all": "All",
+    "quick_select": "Quick select",
+    "total": "Total"
   }
 }
