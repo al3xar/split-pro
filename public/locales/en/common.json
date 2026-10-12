@@ -308,7 +308,8 @@
         "title": "Are you absolutely sure?"
       },
       "simplify_debts": "Simplify debts",
-      "title": "Group info"
+      "title": "Group info",
+      "use_as_household": "Use as Household"
     },
     "group_statistics": {
       "first_expense": "First expense",

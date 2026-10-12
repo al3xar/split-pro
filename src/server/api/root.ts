@@ -4,6 +4,7 @@ import { createTRPCRouter } from '~/server/api/trpc';
 import { analyticsRouter } from './routers/analytics';
 import { debtsRouter } from './routers/debts';
 import { financeRouter } from './routers/finance';
+import { householdRouter } from './routers/household';
 import { userRouter } from './routers/user';
 import { bankTransactionsRouter } from './routers/bankTransactions';
 import { expenseRouter } from './routers/expense';
@@ -21,6 +22,7 @@ export const appRouter = createTRPCRouter({
   analytics: analyticsRouter,
   finance: financeRouter,
   debts: debtsRouter,
+  household: householdRouter,
 });
 
 // Export type definition of API

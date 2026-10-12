@@ -108,6 +108,9 @@ model Group {
   splitwiseGroupId  String?            @unique
   simplifyDebts     Boolean            @default(false)
   archivedAt        DateTime?
+  /// Shown on the household home screen
+  isHousehold       Boolean            @default(false)
+  householdSince    DateTime?
   expenses          Expense[]
   createdBy         User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   groupUsers        GroupUser[]

@@ -5,6 +5,7 @@ import {
   Check,
   ChevronLeft,
   DoorOpen,
+  HomeIcon,
   Info,
   Merge,
   PlusIcon,
@@ -61,6 +62,8 @@ const BalancePage: NextPageWithUser<{
   const leaveGroupMutation = api.group.leaveGroup.useMutation();
   const toggleArchiveMutation = api.group.toggleArchive.useMutation();
   const toggleSimplifyDebtsMutation = api.group.toggleSimplifyDebts.useMutation();
+  const setHouseholdMutation = api.group.setHousehold.useMutation();
+  const apiUtils = api.useUtils();
   const updateGroupDetailsMutation = api.group.updateGroupDetails.useMutation();
   const upsertDefaultSplitMutation = api.group.upsertDefaultSplit.useMutation();
   const clearDefaultSplitMutation = api.group.clearDefaultSplit.useMutation();
@@ -396,6 +399,31 @@ const BalancePage: NextPageWithUser<{
                           {
                             onSuccess: () => {
                               void groupDetailQuery.refetch();
+                            },
+                            onError: () => {
+                              toast.error(t('errors.setting_update_failed'));
+                            },
+                          },
+                        );
+                      }}
+                    />
+                  </Label>
+                  <Label className="flex cursor-pointer items-center justify-between">
+                    <p className="flex items-center">
+                      <HomeIcon className="mr-2 size-4" aria-hidden />{' '}
+                      {t('group_details.group_info.use_as_household')}
+                    </p>
+                    <Switch
+                      id="household-group"
+                      disabled={isArchived}
+                      checked={groupDetailQuery.data?.isHousehold ?? false}
+                      onCheckedChange={(enabled) => {
+                        setHouseholdMutation.mutate(
+                          { groupId, enabled },
+                          {
+                            onSuccess: () => {
+                              void groupDetailQuery.refetch();
+                              void apiUtils.household.invalidate();
                             },
                             onError: () => {
                               toast.error(t('errors.setting_update_failed'));

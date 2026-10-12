@@ -284,7 +284,8 @@
         "title": "¿Estás absolutamente seguro?"
       },
       "simplify_debts": "Simplificar deudas",
-      "title": "Información del grupo"
+      "title": "Información del grupo",
+      "use_as_household": "Usar como Hogar"
     },
     "group_statistics": {
       "first_expense": "Primer gasto",

@@ -211,6 +211,21 @@ export const groupRouter = createTRPCRouter({
       return groupUsers;
     }),
 
+  /** Marks the group shown on the household home screen for all of its members. */
+  setHousehold: groupProcedure
+    .input(z.object({ groupId: z.number(), enabled: z.boolean() }))
+    .mutation(async ({ input, ctx }) => {
+      const group = await ctx.db.group.findUnique({ where: { id: input.groupId } });
+      if (!group) {
+        throw new TRPCError({ code: 'NOT_FOUND', message: 'Group not found' });
+      }
+      await ctx.db.group.update({
+        where: { id: input.groupId },
+        data: { isHousehold: input.enabled, householdSince: input.enabled ? new Date() : null },
+      });
+      return { isHousehold: input.enabled };
+    }),
+
   toggleSimplifyDebts: groupProcedure
     .input(z.object({ groupId: z.number() }))
     .mutation(async ({ input, ctx }) => {

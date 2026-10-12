@@ -93,6 +93,25 @@ export const expenseShare = (expense: AnalyticsExpense, userId: number): bigint 
 const relativeChange = (current: bigint, previous: bigint): number | null =>
   0n === previous ? null : Number(current - previous) / Number(previous);
 
+export const byAmountDesc = (a: { amount: bigint }, b: { amount: bigint }) =>
+  a.amount === b.amount ? 0 : a.amount > b.amount ? -1 : 1;
+
+/** Groups per-category amounts into sections, both sorted from largest to smallest. */
+export const toCategoryTotals = (byCategory: Map<string, bigint>): CategoryTotals[] => {
+  const sections = new Map<CategorySection, CategoryTotals>();
+  byCategory.forEach((amount, category) => {
+    const section = categorySection(category);
+    const sectionTotals = sections.get(section) ?? { section, amount: 0n, items: [] };
+    sectionTotals.amount += amount;
+    sectionTotals.items.push({ category, amount });
+    sections.set(section, sectionTotals);
+  });
+  return [...sections.values()]
+    .filter((s) => 0n < s.amount)
+    .map((s) => ({ ...s, items: s.items.sort(byAmountDesc) }))
+    .sort(byAmountDesc);
+};
+
 export const buildAnalytics = ({
   userId,
   timeZone,
@@ -144,20 +163,7 @@ export const buildAnalytics = ({
     month.savings = month.income - month.expenses;
   });
 
-  const sections = new Map<CategorySection, CategoryTotals>();
-  byCategory.forEach((amount, category) => {
-    const section = categorySection(category);
-    const sectionTotals = sections.get(section) ?? { section, amount: 0n, items: [] };
-    sectionTotals.amount += amount;
-    sectionTotals.items.push({ category, amount });
-    sections.set(section, sectionTotals);
-  });
-  const byAmountDesc = (a: { amount: bigint }, b: { amount: bigint }) =>
-    a.amount === b.amount ? 0 : a.amount > b.amount ? -1 : 1;
-  const categories = [...sections.values()]
-    .filter((s) => 0n < s.amount)
-    .map((s) => ({ ...s, items: s.items.sort(byAmountDesc) }))
-    .sort(byAmountDesc);
+  const categories = toCategoryTotals(byCategory);
 
   const ordered = months.map((m) => totals.get(m)!);
   const current = ordered.at(-1);
