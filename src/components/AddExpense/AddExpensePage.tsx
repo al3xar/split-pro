@@ -33,7 +33,11 @@ export const AddOrEditExpensePage: React.FC<{
   enableSendingInvites: boolean;
   expenseId?: string;
   bankConnectionEnabled: boolean;
-}> = ({ enableSendingInvites, expenseId, bankConnectionEnabled }) => {
+  /** When set (dialog mode), called after saving instead of navigating */
+  onSaved?: (expenseId: string) => void;
+  /** When set (dialog mode), called instead of navigating back */
+  onCancel?: () => void;
+}> = ({ enableSendingInvites, expenseId, bankConnectionEnabled, onSaved, onCancel }) => {
   const showFriends = useAddExpenseStore((s) => s.showFriends);
   const amount = useAddExpenseStore((s) => s.amount);
   const isNegative = useAddExpenseStore((s) => s.isNegative);
@@ -150,6 +154,11 @@ export const AddOrEditExpensePage: React.FC<{
               } else {
                 const id = d.length > 0 ? d[0]?.id : expenseId;
 
+                if (onSaved) {
+                  onSaved(id ?? '');
+                  return;
+                }
+
                 let navPromise: () => Promise<any> = () => Promise.resolve(true);
 
                 const { friendId, groupId } = router.query;
@@ -209,6 +218,7 @@ export const AddOrEditExpensePage: React.FC<{
     multipleTransactions,
     setSingleTransaction,
     update,
+    onSaved,
   ]);
 
   const handleDescriptionChange = useCallback(
@@ -271,8 +281,12 @@ export const AddOrEditExpensePage: React.FC<{
   }, [amount, currency, onConvertAmount]);
 
   const onBackButtonPress = useCallback(() => {
+    if (onCancel) {
+      onCancel();
+      return;
+    }
     router.back();
-  }, [router]);
+  }, [router, onCancel]);
 
   return (
     <div className="flex flex-col gap-4">
