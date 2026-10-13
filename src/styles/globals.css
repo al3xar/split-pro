@@ -245,6 +245,17 @@
 
 html {
   @apply bg-background h-full;
+  /* iOS ignores user-scalable=no; this blocks pinch-zoom while keeping scroll. */
+  touch-action: pan-x pan-y;
+}
+
+/* iOS zooms into any focused field under 16px; keep them at 16px on phones. */
+@media (max-width: 1023px) {
+  input,
+  textarea,
+  select {
+    font-size: max(16px, 1em) !important;
+  }
 }
 
 body {

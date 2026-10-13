@@ -335,7 +335,6 @@ export const AddOrEditExpensePage: React.FC<{
               value={description}
               onChange={handleDescriptionChange}
               className="text-lg placeholder:text-sm"
-              autoFocus
             />
           </div>
           <div className="flex gap-2">

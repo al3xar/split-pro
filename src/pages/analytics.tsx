@@ -1,4 +1,3 @@
-import { AssistantFab } from '~/components/Assistant/AssistantFab';
 import { AddExpenseFab } from '~/components/AddExpense/AddExpenseFab';
 import { keepPreviousData } from '@tanstack/react-query';
 import {
@@ -349,7 +348,6 @@ const AnalyticsPage: NextPageWithUser = () => {
           ) : null}
         </div>
         <AddExpenseFab />
-        <AssistantFab />
       </MainLayout>
     </>
   );

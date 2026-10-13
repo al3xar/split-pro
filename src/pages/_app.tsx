@@ -46,6 +46,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <Head>
         <title>{t('meta.title')}</title>
         <link rel="icon" href="/favicon.ico" />
+        {/* Fixed scale: no pinch-zoom and no auto-zoom when focusing a field on phones. */}
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+        />
         <meta name="application-name" content={t('meta.application_name')} />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-title" content={t('meta.application_name')} />

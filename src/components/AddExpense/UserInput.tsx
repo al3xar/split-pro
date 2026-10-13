@@ -107,7 +107,6 @@ export const UserInput: React.FC<{
         onChange={(e) => setNameOrEmail(e.target.value)}
         onKeyDown={handleKeyDown}
         className="min-w-[100px] grow bg-transparent outline-hidden placeholder:text-sm focus:ring-0"
-        autoFocus
         disabled={isEditing && Boolean(group)}
       />
     </div>

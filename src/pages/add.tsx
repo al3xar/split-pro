@@ -1,6 +1,7 @@
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useCallback, useEffect } from 'react';
 import { AddOrEditExpensePage } from '~/components/AddExpense/AddExpensePage';
 import { useInitAddExpense } from '~/hooks/useInitAddExpense';
 import MainLayout from '~/components/Layout/MainLayout';
@@ -10,6 +11,9 @@ import { type NextPageWithUser } from '~/types';
 import { customServerSideTranslations } from '~/utils/i18n/server';
 import { useTranslationWithUtils } from '~/hooks/useTranslationWithUtils';
 import { useAppStore } from '~/store/appStore';
+import { useApplyPrefill } from '~/hooks/useApplyPrefill';
+import { useAddExpenseDialog } from '~/store/addExpenseDialogStore';
+import { api } from '~/utils/api';
 
 const AddPage: NextPageWithUser<{
   enableSendingInvites: boolean;
@@ -32,6 +36,27 @@ const AddPage: NextPageWithUser<{
     ready: router.isReady,
   });
 
+  // Prefill and callbacks handed over by `openWith` on mobile (see addExpenseDialogStore).
+  const prefill = useAddExpenseDialog((s) => (_expenseId ? null : s.prefill));
+  const clearPrefill = useAddExpenseDialog((s) => s.close);
+  const apiUtils = api.useUtils();
+  useApplyPrefill(prefill, Boolean(currentUser));
+  useEffect(() => clearPrefill, [clearPrefill]);
+
+  const onSaved = useCallback(
+    (savedId: string) => {
+      prefill?.onSaved?.(savedId);
+      apiUtils.invalidate().catch(console.error);
+      router.back();
+    },
+    [prefill, apiUtils, router],
+  );
+  const onCancel = useCallback(() => {
+    prefill?.onCancel?.();
+    router.back();
+  }, [prefill, router]);
+  const hasCallbacks = Boolean(prefill?.onSaved ?? prefill?.onCancel);
+
   return (
     <>
       <Head>
@@ -43,6 +68,8 @@ const AddPage: NextPageWithUser<{
             enableSendingInvites={enableSendingInvites}
             expenseId={_expenseId}
             bankConnectionEnabled={Boolean(bankConnectionEnabled)}
+            onSaved={hasCallbacks ? onSaved : undefined}
+            onCancel={hasCallbacks ? onCancel : undefined}
           />
         )}
       </MainLayout>

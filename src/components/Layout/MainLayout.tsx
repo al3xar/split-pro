@@ -4,6 +4,7 @@ import {
   ListBulletIcon as SolidListBulletIcon,
   PlusCircleIcon as SolidPlusCircleIcon,
   ChartPieIcon as SolidScaleIcon,
+  SparklesIcon as SolidSparklesIcon,
   UserCircleIcon as SolidUserCircleIcon,
   UserGroupIcon as SolidUserGroupIcon,
 } from '@heroicons/react/24/solid';
@@ -24,12 +25,15 @@ interface MainLayoutProps {
   header?: React.ReactNode;
   loading?: boolean;
   hideAppBar?: boolean;
+  /** Hides the mobile bottom navigation, e.g. while the chat keyboard is open */
+  hideBottomNav?: boolean;
 }
 
 const MainLayout: React.FC<MainLayoutProps> = ({
   children,
   actions,
   hideAppBar,
+  hideBottomNav,
   title,
   loading,
 }) => {
@@ -89,6 +93,12 @@ const MainLayout: React.FC<MainLayoutProps> = ({
             currentPath={currentPath}
           />
           <NavItemDesktop
+            title={t?.('navigation.assistant') ?? 'Assistant'}
+            Icon={SolidSparklesIcon}
+            link="/assistant"
+            currentPath={currentPath}
+          />
+          <NavItemDesktop
             title={t?.('navigation.activity') ?? 'Activity'}
             Icon={SolidListBulletIcon}
             link="/activity"
@@ -127,6 +137,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
 
       <nav
         aria-label={t?.('meta.application_name') ?? 'SplitPro'}
+        hidden={hideBottomNav}
         className="bg-background/80 fixed bottom-0 flex w-full justify-between border-t px-1 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-xs backdrop-blur-lg lg:hidden"
       >
         <NavItem
@@ -148,16 +159,15 @@ const MainLayout: React.FC<MainLayoutProps> = ({
           currentPath={currentPath}
         />
         <NavItem
-          title={t?.('navigation.add') ?? 'Add'}
-          Icon={SolidPlusCircleIcon}
-          link="/add"
-          onClick={openAddDialog}
-          currentPath={currentPath}
-        />
-        <NavItem
           title={t?.('navigation.analytics') ?? 'Analytics'}
           Icon={SolidAnalyticsIcon}
           link="/analytics"
+          currentPath={currentPath}
+        />
+        <NavItem
+          title={t?.('navigation.assistant') ?? 'Assistant'}
+          Icon={SolidSparklesIcon}
+          link="/assistant"
           currentPath={currentPath}
         />
         <NavItem

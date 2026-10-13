@@ -1,4 +1,3 @@
-import { AssistantFab } from '~/components/Assistant/AssistantFab';
 import { AddExpenseFab } from '~/components/AddExpense/AddExpenseFab';
 import { keepPreviousData } from '@tanstack/react-query';
 import { ArrowDownRightIcon, ArrowUpRightIcon, DownloadIcon, UsersIcon } from 'lucide-react';
@@ -355,7 +354,6 @@ const HouseholdPage: NextPageWithUser = () => {
           </div>
         ) : null}
         <AddExpenseFab groupId={data?.group.id} />
-        <AssistantFab />
       </MainLayout>
     </>
   );

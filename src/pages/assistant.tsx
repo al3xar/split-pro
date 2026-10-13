@@ -135,6 +135,8 @@ const AssistantPage: NextPageWithUser = () => {
   const router = useRouter();
   const conversationId = 'string' === typeof router.query.c ? router.query.c : undefined;
   const [text, setText] = useState('');
+  // While typing on a phone the bottom navigation hides so only the input sits on the keyboard.
+  const [typing, setTyping] = useState(false);
   const [pendingText, setPendingText] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const timeZone = useMemo(getTimeZone, []);
@@ -248,6 +250,7 @@ const AssistantPage: NextPageWithUser = () => {
       </Head>
       <MainLayout
         title={header}
+        hideBottomNav={typing}
         actions={
           <div className="flex gap-1">
             {conversationId ? (
@@ -358,7 +361,10 @@ const AssistantPage: NextPageWithUser = () => {
         </div>
 
         <form
-          className="bg-background/95 fixed inset-x-0 bottom-20 z-30 mx-auto flex max-w-3xl gap-2 border-t p-3 backdrop-blur lg:bottom-0"
+          className={cn(
+            'bg-background/95 fixed inset-x-0 z-30 mx-auto flex max-w-3xl gap-2 border-t p-3 backdrop-blur lg:bottom-0',
+            typing ? 'bottom-0 pb-[max(0.75rem,env(safe-area-inset-bottom))]' : 'bottom-20',
+          )}
           onSubmit={(e) => {
             e.preventDefault();
             void send(text);
@@ -367,6 +373,9 @@ const AssistantPage: NextPageWithUser = () => {
           <Textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
+            onFocus={() => setTyping(true)}
+            onBlur={() => setTyping(false)}
+            enterKeyHint="send"
             onKeyDown={(e) => {
               if ('Enter' === e.key && !e.shiftKey) {
                 e.preventDefault();
@@ -385,6 +394,8 @@ const AssistantPage: NextPageWithUser = () => {
             className="size-11 shrink-0"
             disabled={!text.trim() || sendMutation.isPending}
             aria-label={t('assistant.send')}
+            // Keep the textarea focused so the layout does not jump under the finger.
+            onPointerDown={(e) => e.preventDefault()}
           >
             <SendIcon className="size-5" aria-hidden />
           </Button>

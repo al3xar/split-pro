@@ -341,7 +341,6 @@ export const FinanceEntryDrawer: React.FC<Props> = ({
               className="h-11 text-lg"
               aria-invalid={amountInvalid}
               aria-describedby={amountInvalid ? amountErrorId : undefined}
-              autoFocus={isNew}
             />
           </div>
           {amountInvalid ? (
