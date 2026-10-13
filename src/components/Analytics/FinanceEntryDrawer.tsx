@@ -127,7 +127,7 @@ export const FinanceEntryDrawer: React.FC<Props> = ({
     setCurrency(nextCurrency);
     setAmount(source?.amount ?? 0n);
     setAmountStr(source ? getCurrencyHelpersCached(nextCurrency).toUIString(source.amount) : '');
-    setCategory(source?.category ?? FINANCE_CATEGORIES[nextType][0]);
+    setCategory(source?.category ?? FINANCE_CATEGORIES[nextType][0] ?? 'other');
     setDescription(source?.description ?? '');
     setDate(entry?.date ?? draft.date);
     setFrequency('once');
@@ -138,7 +138,7 @@ export const FinanceEntryDrawer: React.FC<Props> = ({
   const onTypeChange = useCallback((value: string) => {
     const nextType = value as FinanceEntryKind;
     setType(nextType);
-    setCategory(FINANCE_CATEGORIES[nextType][0]);
+    setCategory(FINANCE_CATEGORIES[nextType][0] ?? 'other');
   }, []);
 
   const onAmountChange = useCallback(

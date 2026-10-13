@@ -187,6 +187,24 @@ describe('buildAnalytics', () => {
     expect(result.summary.expensesChange).toBeCloseTo(1); // +100 %
   });
 
+  it('adds personal expenses to spending and categories, but not to the household total', () => {
+    const result = buildAnalytics({
+      userId: ME,
+      timeZone: TZ,
+      months: ['2026-10'],
+      expenses: [expense({})], // My share 50 of groceries
+      entries: [
+        entry({ type: 'EXPENSE', amount: 25_00n, category: 'clothing' }),
+        entry({ type: 'EXPENSE', amount: 10_00n, category: 'groceries' }),
+      ],
+    });
+    expect(result.months[0]).toMatchObject({ expenses: 85_00n, householdExpenses: 100_00n });
+    expect(result.categories.map((c) => [c.section, c.amount])).toEqual([
+      ['food', 60_00n],
+      ['life', 25_00n],
+    ]);
+  });
+
   it('has no savings rate without income and no change without a previous month', () => {
     const result = buildAnalytics({
       userId: ME,

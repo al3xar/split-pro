@@ -39,34 +39,37 @@ model Session {
 }
 
 model User {
-  id                   Int                  @id @default(autoincrement())
+  id                   Int                   @id @default(autoincrement())
   name                 String?
-  email                String?              @unique
+  email                String?               @unique
   emailVerified        DateTime?
   image                String?
-  currency             String               @default("USD")
+  currency             String                @default("USD")
   defaultCurrency      String?
-  preferredLanguage    String               @default("")
+  preferredLanguage    String                @default("")
   bankingId            String?
   obapiProviderId      String?
   accounts             Account[]
-  friendBalances       BalanceView[]        @relation("FriendBalanceView")
-  userBalances         BalanceView[]        @relation("UserBalanceView")
-  cachedBankData       CachedBankData[]     @relation("UserCachedBankData")
-  addedExpenses        Expense[]            @relation("AddedByUser")
-  deletedExpenses      Expense[]            @relation("DeletedByUser")
-  paidExpenses         Expense[]            @relation("PaidByUser")
-  updatedExpenses      Expense[]            @relation("UpdatedByUser")
+  friendBalances       BalanceView[]         @relation("FriendBalanceView")
+  userBalances         BalanceView[]         @relation("UserBalanceView")
+  cachedBankData       CachedBankData[]      @relation("UserCachedBankData")
+  addedExpenses        Expense[]             @relation("AddedByUser")
+  deletedExpenses      Expense[]             @relation("DeletedByUser")
+  paidExpenses         Expense[]             @relation("PaidByUser")
+  updatedExpenses      Expense[]             @relation("UpdatedByUser")
   expenseNotes         ExpenseNote[]
   expenseParticipants  ExpenseParticipant[]
   groups               Group[]
   associatedGroups     GroupUser[]
-  friendDefaultSplitsA FriendDefaultSplit[] @relation("FriendDefaultSplitUserA")
-  friendDefaultSplitsB FriendDefaultSplit[] @relation("FriendDefaultSplitUserB")
+  friendDefaultSplitsA FriendDefaultSplit[]  @relation("FriendDefaultSplitUserA")
+  friendDefaultSplitsB FriendDefaultSplit[]  @relation("FriendDefaultSplitUserB")
   sessions             Session[]
-  hiddenFriendIds      Int[]                @default([])
+  hiddenFriendIds      Int[]                 @default([])
   financeEntries       FinanceEntry[]
   financeRecurrences   FinanceRecurrence[]
+  importedTransactions ImportedTransaction[]
+  importProfiles       ImportProfile[]
+  transactionRules     TransactionRule[]
 
   @@schema("public")
 }
@@ -401,6 +404,7 @@ model FinanceRecurrence {
 enum FinanceEntryType {
   INCOME
   INVESTMENT
+  EXPENSE
 
   @@schema("public")
 }
@@ -414,5 +418,68 @@ enum SplitType {
   SETTLEMENT
   CURRENCY_CONVERSION
 
+  @@schema("public")
+}
+
+enum ImportedTransactionStatus {
+  PENDING
+  SHARED
+  PERSONAL
+  INCOME
+  IGNORED
+
+  @@schema("public")
+}
+
+/// A bank statement line waiting in the inbox to be classified.
+model ImportedTransaction {
+  id             String                    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         Int
+  hash           String
+  date           DateTime
+  description    String
+  /// Signed, minor units: negative = money out
+  amount         BigInt
+  currency       String
+  source         String                    @default("")
+  status         ImportedTransactionStatus @default(PENDING)
+  category       String?
+  expenseId      String?                   @db.Uuid
+  financeEntryId Int?
+  createdAt      DateTime                  @default(now())
+  updatedAt      DateTime                  @updatedAt
+  user           User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, hash])
+  @@index([userId, status, date])
+  @@schema("public")
+}
+
+/// Column mapping of a bank's CSV, reused on the next import.
+model ImportProfile {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  name      String
+  mapping   Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, name])
+  @@schema("public")
+}
+
+/// Learned classification: statement lines containing `pattern` get `action`/`category`.
+model TransactionRule {
+  id        Int                       @id @default(autoincrement())
+  userId    Int
+  pattern   String
+  action    ImportedTransactionStatus
+  category  String?
+  createdAt DateTime                  @default(now())
+  updatedAt DateTime                  @updatedAt
+  user      User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, pattern])
   @@schema("public")
 }

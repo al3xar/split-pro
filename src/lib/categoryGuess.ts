@@ -70,7 +70,7 @@ export type RuleAction = 'SHARED' | 'PERSONAL' | 'INCOME' | 'IGNORED';
 
 export interface Rule {
   pattern: string;
-  action: RuleAction;
+  action: string;
   category: string | null;
 }
 

@@ -1,6 +1,6 @@
 import { CATEGORIES, type CategorySection } from './category';
 
-export type FinanceEntryKind = 'INCOME' | 'INVESTMENT';
+export type FinanceEntryKind = 'INCOME' | 'INVESTMENT' | 'EXPENSE';
 
 export interface AnalyticsExpense {
   amount: bigint;
@@ -154,6 +154,12 @@ export const buildAnalytics = ({
     }
     if ('INCOME' === entry.type) {
       month.income += entry.amount;
+    } else if ('EXPENSE' === entry.type) {
+      // Personal expense: part of what I spend, not of the household total.
+      month.expenses += entry.amount;
+      if (month.month === lastMonth) {
+        byCategory.set(entry.category, (byCategory.get(entry.category) ?? 0n) + entry.amount);
+      }
     } else {
       month.investments += entry.amount;
     }

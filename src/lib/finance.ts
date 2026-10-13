@@ -1,11 +1,23 @@
 import { z } from 'zod';
 
 import { type FinanceEntryKind } from './analytics';
+import { CATEGORIES } from './category';
+
+/** Personal expenses use SplitPro's own categories (sections and their items). */
+const EXPENSE_CATEGORIES = [
+  ...new Set(
+    Object.entries(CATEGORIES).flatMap(([section, items]) => [
+      section,
+      ...items.filter((item) => 'other' !== item),
+    ]),
+  ),
+];
 
 export const FINANCE_CATEGORIES = {
   INCOME: ['salary', 'bonus', 'freelance', 'rental', 'benefits', 'gift', 'compensation', 'other'],
   INVESTMENT: ['funds', 'stocks', 'crypto', 'pension', 'deposit', 'realEstate', 'other'],
-} as const satisfies Record<FinanceEntryKind, readonly string[]>;
+  EXPENSE: EXPENSE_CATEGORIES,
+} satisfies Record<FinanceEntryKind, readonly string[]>;
 
 export const FINANCE_ENTRY_KINDS = [
   'INCOME',
@@ -26,7 +38,7 @@ export const timeZoneSchema = z.string().refine((tz) => {
 }, 'Invalid time zone');
 
 const financeFieldsSchema = z.object({
-  type: z.enum(FINANCE_ENTRY_KINDS),
+  type: z.enum(['INCOME', 'INVESTMENT', 'EXPENSE']),
   amount: z.bigint().positive(),
   currency: z.string().min(3).max(3),
   category: z.string().min(1),
