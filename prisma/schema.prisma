@@ -70,6 +70,7 @@ model User {
   importedTransactions ImportedTransaction[]
   importProfiles       ImportProfile[]
   transactionRules     TransactionRule[]
+  chatConversations    ChatConversation[]
 
   @@schema("public")
 }
@@ -481,5 +482,35 @@ model TransactionRule {
   user      User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, pattern])
+  @@schema("public")
+}
+
+/// An assistant conversation of one user.
+model ChatConversation {
+  id        String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    Int
+  title     String        @default("")
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  ChatMessage[]
+
+  @@index([userId, updatedAt])
+  @@schema("public")
+}
+
+/// One message in OpenAI chat format; `proposal` holds an expense proposed by the assistant.
+model ChatMessage {
+  id             Int              @id @default(autoincrement())
+  conversationId String           @db.Uuid
+  role           String
+  content        String?
+  toolCalls      Json?
+  toolCallId     String?
+  proposal       Json?
+  createdAt      DateTime         @default(now())
+  conversation   ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, id])
   @@schema("public")
 }

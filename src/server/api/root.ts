@@ -2,6 +2,7 @@ import { groupRouter } from '~/server/api/routers/group';
 import { createTRPCRouter } from '~/server/api/trpc';
 
 import { analyticsRouter } from './routers/analytics';
+import { assistantRouter } from './routers/assistant';
 import { debtsRouter } from './routers/debts';
 import { financeRouter } from './routers/finance';
 import { householdRouter } from './routers/household';
@@ -27,6 +28,7 @@ export const appRouter = createTRPCRouter({
   household: householdRouter,
   tricount: tricountRouter,
   inbox: inboxRouter,
+  assistant: assistantRouter,
 });
 
 // Export type definition of API
