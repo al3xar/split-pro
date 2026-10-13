@@ -727,12 +727,42 @@
     "unavailable": "The AI model is not reachable right now.",
     "error": "Something went wrong. Try again.",
     "disabled_title": "The assistant is not configured",
-    "disabled_body": "Set LLM_BASE_URL, LLM_MODEL and LLM_API_KEY on the server to enable it.",
+    "disabled_body": "Configure the URL, model and API key of your OpenAI-compatible endpoint to enable it.",
     "suggestions": {
       "spent_month": "How much have we spent this month?",
       "pending_food": "What do I still owe for food?",
       "add_dinner": "Add 40 € for dinner, I paid",
       "top_categories": "Where does most of our money go this year?"
+    }
+  },
+  "assistant_settings": {
+    "title": "Assistant settings",
+    "configure": "Configure",
+    "intro": "Any OpenAI-compatible endpoint works: vLLM, Ollama, LM Studio, OpenAI… The settings apply to everyone on this SplitPro.",
+    "from_env": "These values come from the server environment. Saving here overrides them.",
+    "base_url": "Endpoint URL",
+    "base_url_hint": "Usually ends in /v1. The SplitPro server must be able to reach it.",
+    "model": "Model",
+    "api_key": "API key",
+    "api_key_placeholder": "Optional for local servers",
+    "api_key_set": "Configured {{hint}} — type to replace",
+    "api_key_hint": "Stored encrypted on the server and never shown again.",
+    "remove_key": "Remove key",
+    "max_steps": "Max tool rounds per message",
+    "test": "Test connection",
+    "testing": "Testing…",
+    "save": "Save",
+    "reset": "Use server environment",
+    "reset_done": "Settings removed; the server environment is used.",
+    "saved": "Settings saved",
+    "error": "Could not save",
+    "test_ok": "Connected — {{count}} models available",
+    "model_missing": "The model is not in the list the server returned. Check its exact name.",
+    "test_errors": {
+      "auth": "The endpoint rejected the API key ({{code}}).",
+      "timeout": "No answer within 10 s. Is the server reachable from SplitPro?",
+      "unreachable": "Cannot reach the URL from the SplitPro server (DNS, network or certificate).",
+      "http": "The endpoint answered with an error ({{code}})."
     }
   }
 }

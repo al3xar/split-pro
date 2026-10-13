@@ -5,6 +5,7 @@ import {
   MessageSquarePlusIcon,
   ReceiptTextIcon,
   SendIcon,
+  SettingsIcon,
   SparklesIcon,
   Trash2Icon,
   XIcon,
@@ -232,6 +233,9 @@ const AssistantPage: NextPageWithUser = () => {
         <div className="bg-card rounded-xl border p-6 text-center">
           <p className="font-semibold">{t('assistant.disabled_title')}</p>
           <p className="text-muted-foreground mt-1 text-sm">{t('assistant.disabled_body')}</p>
+          <Button asChild className="mt-3 h-11">
+            <Link href="/assistant/settings">{t('assistant_settings.configure')}</Link>
+          </Button>
         </div>
       </MainLayout>
     );
@@ -257,6 +261,11 @@ const AssistantPage: NextPageWithUser = () => {
                 <Trash2Icon className="size-5" aria-hidden />
               </Button>
             ) : null}
+            <Button variant="ghost" size="icon" className="size-11" asChild>
+              <Link href="/assistant/settings" aria-label={t('assistant_settings.title')}>
+                <SettingsIcon className="size-5" aria-hidden />
+              </Link>
+            </Button>
             <Button
               variant="ghost"
               size="icon"

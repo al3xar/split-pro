@@ -2,11 +2,16 @@ import { type Prisma } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
-import { env } from '~/env';
 import { timeZoneSchema } from '~/lib/finance';
 import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc';
 import { runAgent } from '~/server/assistant/agent';
 import { type ChatMsg, type ToolCall, chatCompletion } from '~/server/assistant/llm';
+import { maskSecret } from '~/server/assistant/config';
+import {
+  clearAssistantConfig,
+  getAssistantConfig,
+  saveAssistantConfig,
+} from '~/server/assistant/configStore';
 import { type AssistantContext, buildTools, systemPrompt } from '~/server/assistant/tools';
 import { db } from '~/server/db';
 
@@ -18,11 +23,47 @@ export interface ProposalState {
   expenseId?: string;
 }
 
-const isEnabled = () => Boolean(env.LLM_BASE_URL && env.LLM_MODEL);
-
-const assertEnabled = () => {
-  if (!isEnabled()) {
+const enabledConfig = async () => {
+  const config = await getAssistantConfig();
+  if (!config.enabled) {
     throw new TRPCError({ code: 'PRECONDITION_FAILED', message: 'ASSISTANT_DISABLED' });
+  }
+  return config;
+};
+
+const urlSchema = z
+  .string()
+  .trim()
+  .url()
+  .refine((url) => /^https?:\/\//.test(url), 'Only http(s) URLs');
+
+/** GET {base}/models with the key: proves the URL, the key and that the model exists. */
+const testConnection = async (
+  baseUrl: string,
+  apiKey: string | undefined,
+  model: string | undefined,
+) => {
+  try {
+    const response = await fetch(`${baseUrl.replace(/\/+$/, '')}/models`, {
+      headers: apiKey ? { Authorization: `Bearer ${apiKey}` } : {},
+      signal: AbortSignal.timeout(10_000),
+    });
+    if (!response.ok) {
+      return { ok: false as const, error: `HTTP_${response.status}`, models: [] as string[] };
+    }
+    const json = (await response.json()) as { data?: { id?: string }[] };
+    const models = (json.data ?? []).map((m) => m.id).filter((id): id is string => Boolean(id));
+    return {
+      ok: true as const,
+      models: models.slice(0, 50),
+      modelFound: model ? models.includes(model) : null,
+    };
+  } catch (error) {
+    return {
+      ok: false as const,
+      error: error instanceof Error && 'TimeoutError' === error.name ? 'TIMEOUT' : 'UNREACHABLE',
+      models: [] as string[],
+    };
   }
 };
 
@@ -78,7 +119,60 @@ const toChatMsg = (row: {
 });
 
 export const assistantRouter = createTRPCRouter({
-  enabled: protectedProcedure.query(() => isEnabled()),
+  enabled: protectedProcedure.query(async () => (await getAssistantConfig()).enabled),
+
+  /** Settings for the UI; the API key never leaves the server, only a hint. */
+  settings: protectedProcedure.query(async () => {
+    const config = await getAssistantConfig();
+    return {
+      baseUrl: config.baseUrl ?? '',
+      model: config.model ?? '',
+      maxSteps: config.maxSteps,
+      hasApiKey: Boolean(config.apiKey),
+      apiKeyHint: config.apiKey ? maskSecret(config.apiKey) : null,
+      source: config.source,
+      enabled: config.enabled,
+    };
+  }),
+
+  saveSettings: protectedProcedure
+    .input(
+      z.object({
+        baseUrl: urlSchema.or(z.literal('')),
+        model: z.string().trim().max(200),
+        /** Undefined = keep, null = remove, string = replace */
+        apiKey: z.string().max(500).nullable().optional(),
+        maxSteps: z.number().int().min(1).max(10),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      await saveAssistantConfig({
+        baseUrl: input.baseUrl || null,
+        model: input.model || null,
+        apiKey: input.apiKey,
+        maxSteps: input.maxSteps,
+      });
+      return { saved: true };
+    }),
+
+  resetSettings: protectedProcedure.mutation(async () => {
+    await clearAssistantConfig();
+    return { reset: true };
+  }),
+
+  /** Tries the given URL/model; uses the stored key unless a new one is typed. */
+  testSettings: protectedProcedure
+    .input(
+      z.object({
+        baseUrl: urlSchema,
+        model: z.string().trim().max(200),
+        apiKey: z.string().max(500).optional(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const stored = await getAssistantConfig();
+      return testConnection(input.baseUrl, input.apiKey || stored.apiKey, input.model || undefined);
+    }),
 
   conversations: protectedProcedure.query(({ ctx }) =>
     db.chatConversation.findMany({
@@ -118,7 +212,7 @@ export const assistantRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      assertEnabled();
+      const assistantConfig = await enabledConfig();
       const userId = ctx.session.user.id;
       const conversation = input.conversationId
         ? await ownConversation(userId, input.conversationId)
@@ -149,7 +243,11 @@ export const assistantRouter = createTRPCRouter({
       const today = new Intl.DateTimeFormat('en-CA', { timeZone: input.timeZone }).format(
         new Date(),
       );
-      const config = { baseUrl: env.LLM_BASE_URL!, apiKey: env.LLM_API_KEY, model: env.LLM_MODEL! };
+      const config = {
+        baseUrl: assistantConfig.baseUrl!,
+        apiKey: assistantConfig.apiKey,
+        model: assistantConfig.model!,
+      };
 
       let result: Awaited<ReturnType<typeof runAgent>>;
       try {
@@ -157,7 +255,7 @@ export const assistantRouter = createTRPCRouter({
           messages: [{ role: 'system', content: systemPrompt(context, today) }, ...history],
           tools: buildTools(context),
           complete: (messages, tools) => chatCompletion(config, messages, tools),
-          maxSteps: env.LLM_MAX_STEPS,
+          maxSteps: assistantConfig.maxSteps,
         });
       } catch (error) {
         console.error('Assistant LLM call failed', error);

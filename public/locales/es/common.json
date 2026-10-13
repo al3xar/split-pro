@@ -689,12 +689,42 @@
     "unavailable": "El modelo de IA no está disponible ahora mismo.",
     "error": "Algo ha fallado. Inténtalo de nuevo.",
     "disabled_title": "El asistente no está configurado",
-    "disabled_body": "Define LLM_BASE_URL, LLM_MODEL y LLM_API_KEY en el servidor para activarlo.",
+    "disabled_body": "Configura la URL, el modelo y la API key de tu endpoint compatible con OpenAI para activarlo.",
     "suggestions": {
       "spent_month": "¿Cuánto llevamos gastado este mes?",
       "pending_food": "¿Qué me queda por pagar de comida?",
       "add_dinner": "Añade 40 € de cena, pagué yo",
       "top_categories": "¿En qué se nos va más dinero este año?"
+    }
+  },
+  "assistant_settings": {
+    "title": "Configuración del asistente",
+    "configure": "Configurar",
+    "intro": "Sirve cualquier endpoint compatible con OpenAI: vLLM, Ollama, LM Studio, OpenAI… La configuración se aplica a todos los usuarios de este SplitPro.",
+    "from_env": "Estos valores vienen del entorno del servidor. Si guardas aquí, tendrán prioridad.",
+    "base_url": "URL del endpoint",
+    "base_url_hint": "Normalmente termina en /v1. El servidor de SplitPro tiene que poder llegar a ella.",
+    "model": "Modelo",
+    "api_key": "API key",
+    "api_key_placeholder": "Opcional en servidores locales",
+    "api_key_set": "Configurada {{hint}} — escribe para sustituirla",
+    "api_key_hint": "Se guarda cifrada en el servidor y no se vuelve a mostrar.",
+    "remove_key": "Quitar clave",
+    "max_steps": "Máximo de rondas de herramientas por mensaje",
+    "test": "Probar conexión",
+    "testing": "Probando…",
+    "save": "Guardar",
+    "reset": "Usar el entorno del servidor",
+    "reset_done": "Configuración borrada; se usa la del entorno del servidor.",
+    "saved": "Configuración guardada",
+    "error": "No se ha podido guardar",
+    "test_ok": "Conectado — {{count}} modelos disponibles",
+    "model_missing": "El modelo no aparece en la lista que devuelve el servidor. Revisa el nombre exacto.",
+    "test_errors": {
+      "auth": "El endpoint ha rechazado la API key ({{code}}).",
+      "timeout": "Sin respuesta en 10 s. ¿Llega el servidor de SplitPro a esa dirección?",
+      "unreachable": "El servidor de SplitPro no llega a esa URL (DNS, red o certificado).",
+      "http": "El endpoint ha respondido con un error ({{code}})."
     }
   }
 }
