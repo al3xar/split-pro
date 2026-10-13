@@ -45,6 +45,8 @@ export const loadPairDebts = async (
       expenseDate: true,
       createdAt: true,
       recurrenceId: true,
+      transactionId: true,
+      debtReopenedAt: true,
       expenseParticipants: { select: { userId: true, amount: true } },
       settlementTargets: { select: { expenseId: true, order: true } },
     },

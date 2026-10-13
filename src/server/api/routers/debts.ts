@@ -3,6 +3,7 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { DEFAULT_CATEGORY } from '~/lib/category';
+import { isFixedDebt } from '~/lib/debts';
 import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc';
 import { db } from '~/server/db';
 
@@ -31,13 +32,16 @@ export const debtsRouter = createTRPCRouter({
     return loadPairDebts(ctx.session.user.id, input.friendId, input.groupId, input.currency);
   }),
 
-  /** Registers a payment from the net debtor that covers the chosen debts first. */
+  /**
+   * Registers a payment that covers the chosen debts. They must all be owed by the same person,
+   * who is the payer; either member can register it.
+   */
   settle: protectedProcedure
     .input(
       pairInput.extend({
         expenseIds: z.array(z.string().uuid()).min(1),
         expectedTotal: z.bigint().positive(),
-        name: z.string().min(1).max(100),
+        name: z.string().trim().min(1).max(100),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -55,18 +59,20 @@ export const debtsRouter = createTRPCRouter({
           input.currency,
           tx,
         );
-        if (null === debts.debtorId || null === debts.creditorId) {
-          throw new TRPCError({ code: 'CONFLICT', message: 'Nothing to settle' });
-        }
         const pending = new Map(
-          debts.items
-            .filter((i) => i.debtorId === debts.debtorId && 0n < i.remaining)
-            .map((i) => [i.expenseId, i.remaining]),
+          debts.items.filter((i) => 0n < i.remaining).map((i) => [i.expenseId, i]),
         );
-        if (!input.expenseIds.every((id) => pending.has(id))) {
+        const chosen = input.expenseIds.map((id) => pending.get(id));
+        if (chosen.some((i) => undefined === i)) {
           throw new TRPCError({ code: 'CONFLICT', message: 'Debts changed' });
         }
-        const total = input.expenseIds.reduce((sum, id) => sum + pending.get(id)!, 0n);
+        const debtorIds = new Set(chosen.map((i) => i!.debtorId));
+        if (1 !== debtorIds.size) {
+          throw new TRPCError({ code: 'BAD_REQUEST', message: 'Debts of different debtors' });
+        }
+        const debtorId = chosen[0]!.debtorId;
+        const creditorId = chosen[0]!.creditorId;
+        const total = chosen.reduce((sum, i) => sum + i!.remaining, 0n);
         if (total !== input.expectedTotal) {
           throw new TRPCError({ code: 'CONFLICT', message: 'Debts changed' });
         }
@@ -74,7 +80,7 @@ export const debtsRouter = createTRPCRouter({
         return tx.expense.create({
           data: {
             groupId: input.groupId,
-            paidBy: debts.debtorId,
+            paidBy: debtorId,
             addedBy: userId,
             name: input.name,
             category: DEFAULT_CATEGORY,
@@ -83,8 +89,8 @@ export const debtsRouter = createTRPCRouter({
             currency: input.currency,
             expenseParticipants: {
               create: [
-                { userId: debts.debtorId, amount: total },
-                { userId: debts.creditorId, amount: -total },
+                { userId: debtorId, amount: total },
+                { userId: creditorId, amount: -total },
               ],
             },
             settlementTargets: {
@@ -97,5 +103,31 @@ export const debtsRouter = createTRPCRouter({
 
       sendExpensePushNotification(settlement.id).catch(console.error);
       return { settlementId: settlement.id };
+    }),
+
+  /** Takes an imported fixed expense out of the history allocation, or puts it back. */
+  reopen: protectedProcedure
+    .input(z.object({ expenseId: z.string().uuid(), reopened: z.boolean() }))
+    .mutation(async ({ ctx, input }) => {
+      const expense = await db.expense.findFirst({
+        where: {
+          id: input.expenseId,
+          deletedAt: null,
+          transactionId: { startsWith: 'tricount:' },
+          OR: [
+            { group: { groupUsers: { some: { userId: ctx.session.user.id } } } },
+            { expenseParticipants: { some: { userId: ctx.session.user.id } } },
+          ],
+        },
+        select: { id: true, category: true, recurrenceId: true },
+      });
+      if (!expense || !isFixedDebt(expense.category, null !== expense.recurrenceId)) {
+        throw new TRPCError({ code: 'NOT_FOUND', message: 'Imported fixed expense not found' });
+      }
+      await db.expense.update({
+        where: { id: expense.id },
+        data: { debtReopenedAt: input.reopened ? new Date() : null },
+      });
+      return { reopened: input.reopened };
     }),
 });

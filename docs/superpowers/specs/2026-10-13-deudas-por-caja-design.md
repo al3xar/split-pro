@@ -1,7 +1,7 @@
 # Deudas por caja: los fijos solo se saldan a propósito
 
 - **Fecha:** 2026-10-13
-- **Estado:** aprobado en conversación, pendiente de revisión escrita
+- **Estado:** aprobado e implementado (2026-10-13)
 - **Modifica:** `2026-10-12-hogar-design.md` §1 (compensación por prioridad 1-4)
 
 ## 0. Objetivo
@@ -46,10 +46,14 @@ Se recalcula siempre desde cero; no se guarda ningún estado de cobertura.
    las deudas de D con C con la regla antigua: prioridad 1 → 4 y, dentro de cada prioridad, de la
    más antigua a la más nueva. Así los fijos se pagan primero. Se saltan los fijos **reabiertos**
    (§1.4). Lo que sobre pasa a crédito libre de D.
-3. **Compensación dentro de cada sección variable**: lo pendiente de A con B y de B con A en la
+3. **Fijos importados, pagados por defecto**: cada fijo importado de Tricount que no esté
+   reabierto se compensa con las deudas variables de la otra persona, de la más antigua a la más
+   nueva. Hace falta porque el historial real no tiene transferencias: sin este paso, el seguro
+   importado saldría pendiente.
+4. **Compensación dentro de cada sección variable**: lo pendiente de A con B y de B con A en la
    misma sección se anula hasta el menor de los dos. Se cubren primero las deudas más antiguas de
    ambos lados.
-4. **Créditos libres** (pagos sin deudas elegidas, más lo sobrante de 1 y 2):
+5. **Créditos libres** (pagos sin deudas elegidas, más lo sobrante de 1 y 2):
    1. Los créditos libres de A y de B se anulan entre sí.
    2. Lo que quede de D cubre las deudas **variables** de D, de la más antigua a la más nueva,
       sin importar la sección. **Nunca** cubre fijas.
@@ -69,8 +73,8 @@ Una deuda cubierta en parte por pago y en parte por compensación queda `settled
 ### 1.4 Reabrir un fijo importado
 
 - Campo nuevo: `Expense.debtReopenedAt DateTime?`.
-- Solo tiene efecto en el paso 2: los pagos heredados no cubren ese gasto, así que sale pendiente y
-  su dinero se va a otras deudas.
+- Tiene efecto en los pasos 2 y 3: ni los pagos heredados ni la compensación cubren ese gasto, así
+  que sale pendiente y su dinero se va a otras deudas.
 - La acción "Volver a pendiente" está en los fijos cubiertos por pagos heredados. "Deshacer" borra
   el campo.
 
@@ -97,7 +101,7 @@ Sustituye a `debtPriority` y `remainingByPriority`. `debtPriority` se mantiene *
 paso 2.
 
 ```ts
-type DebtBucket = { kind: 'fixed'; expenseId: string } | { kind: 'variable'; section: string };
+type DebtBucket = { kind: 'fixed' } | { kind: 'variable'; section: string };
 
 interface DebtItem {
   expenseId: string;
@@ -109,7 +113,7 @@ interface DebtItem {
   covered: bigint;
   remaining: bigint;
   status: 'pending' | 'partial' | 'settled' | 'compensated';
-  coveredByLegacy: boolean; // true si el paso 2 aportó algo (para "Volver a pendiente")
+  coveredByHistory: boolean; // fijo cubierto por los pasos 2 o 3 (para "Volver a pendiente")
   reopened: boolean;
 }
 
@@ -122,7 +126,7 @@ interface PairDebts {
     bySection: Record<string, bigint>;
     total: bigint;
   }>;
-  advance: { userId: number; amount: bigint } | null; // "a cuenta" (§1.2 paso 4.3)
+  advance: { userId: number; amount: bigint } | null; // "a cuenta" (§1.2 paso 5.3)
 }
 
 allocateDebts({ userA, userB, currency, expenses, targets }): PairDebts
@@ -187,8 +191,9 @@ Ya pagado ▸   (plegado: fijos cubiertos, con "Volver a pendiente" en los hered
 - **Datos existentes**: no se tocan.
   - Los pagos creados con Saldar ya tienen sus deudas elegidas.
   - Los pagos sin deudas elegidas se aplican con la regla nueva (solo variables). Esto puede dejar
-    pendientes fijos que antes salían cubiertos. En el NAS no hay historial de Tricount todavía;
-    antes de desplegar se mirará qué cambia con los datos reales y se avisará.
+    pendientes fijos que antes salían cubiertos. Comprobado con los datos del NAS: no hay pagos
+    registrados; la luz y el gas (creados en la app) pasan a pendientes y el seguro importado sigue
+    pagado.
 
 ## 5. Pruebas
 

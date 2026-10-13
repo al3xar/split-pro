@@ -178,7 +178,7 @@ export const buildTools = (ctx: AssistantContext): AgentTool[] => {
     {
       name: 'get_pending_debts',
       description:
-        'What is still owed between the user and the other household members, by category, after automatic compensation.',
+        'What is still owed between the user and the other household members. Fixed costs (rent, utilities, recurring) are only settled by an explicit payment and are listed one by one; variable debts compensate within their category section.',
       parameters: { type: 'object', properties: {} },
       schema: z.object({}).passthrough(),
       run: async () => {
@@ -190,20 +190,37 @@ export const buildTools = (ctx: AssistantContext): AgentTool[] => {
             .filter((m) => m.id !== ctx.userId)
             .map(async (friend) => {
               const debts = await loadPairDebts(ctx.userId, friend.id, ctx.group!.id, ctx.currency);
-              const byCategory = new Map<string, bigint>();
-              debts.items
-                .filter((i) => i.debtorId === debts.debtorId && 0n < i.remaining)
-                .forEach((i) =>
-                  byCategory.set(i.category, (byCategory.get(i.category) ?? 0n) + i.remaining),
+              const owedBy = (userId: number) => {
+                const pending = debts.items.filter(
+                  (i) => i.debtorId === userId && 0n < i.remaining,
                 );
+                return {
+                  total: money(debts.owed[userId]?.total ?? 0n),
+                  fixed: pending
+                    .filter((i) => 'fixed' === i.bucket.kind)
+                    .map((i) => ({
+                      name: debts.expenses[i.expenseId]?.name,
+                      date: debts.expenses[i.expenseId]
+                        ? day(debts.expenses[i.expenseId]!.expenseDate)
+                        : null,
+                      amount: money(i.remaining),
+                    })),
+                  variable_by_section: Object.entries(debts.owed[userId]?.bySection ?? {})
+                    .filter(([, amount]) => 0n < amount)
+                    .map(([section, amount]) => ({ section, amount: money(amount) })),
+                };
+              };
               return {
                 with: friend.name,
-                debtor: null === debts.debtorId ? null : nameOf(debts.debtorId),
-                net: money(debts.net),
-                pending_by_category: [...byCategory.entries()].map(([category, amount]) => ({
-                  category,
-                  amount: money(amount),
-                })),
+                overall_balance: {
+                  debtor: null === debts.netDebtorId ? null : nameOf(debts.netDebtorId),
+                  amount: money(debts.net),
+                },
+                user_owes: owedBy(ctx.userId),
+                [`${friend.name}_owes`]: owedBy(friend.id),
+                paid_in_advance: debts.advance
+                  ? { by: nameOf(debts.advance.userId), amount: money(debts.advance.amount) }
+                  : null,
               };
             }),
         );

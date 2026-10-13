@@ -574,12 +574,6 @@
     "personal_expenses": "Personal expenses"
   },
   "debts": {
-    "priority": {
-      "1": "Housing & fixed",
-      "2": "Food",
-      "3": "Other",
-      "4": "Leisure"
-    },
     "remaining_of": "{{remaining}} left of {{amount}}",
     "settled": "Settled",
     "compensated": "Compensated",
@@ -593,7 +587,22 @@
     "quick_select": "Quick select",
     "total": "Total",
     "expenses_count_one": "{{count}} expense",
-    "expenses_count_other": "{{count}} expenses"
+    "expenses_count_other": "{{count}} expenses",
+    "fixed": "Fixed costs",
+    "variable": "Variable",
+    "you_owe_title": "You owe {{name}}",
+    "owes_you_title": "{{name}} owes you",
+    "advance_yours": "Paid in advance by you",
+    "advance_theirs": "Paid in advance by {{name}}",
+    "paid_fixed_one": "{{count}} fixed cost already paid",
+    "paid_fixed_other": "{{count}} fixed costs already paid",
+    "reopen": "Mark as pending",
+    "undo_reopen": "Undo",
+    "reopened": "reopened",
+    "payment_prefix": "Payment",
+    "payment_name": "Payment reference",
+    "who_pays": "Who pays",
+    "show_expenses": "Show {{name}} expenses"
   },
   "household": {
     "title": "Household",

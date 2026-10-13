@@ -86,27 +86,37 @@ const DebtsCard: React.FC<{
   const { t, displayName } = useTranslationWithUtils();
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
+  const [initialExpenseIds, setInitialExpenseIds] = useState<string[] | undefined>();
   const currentUserId = session?.user.id ?? -1;
   const friendName = displayName(pair.friend, currentUserId);
   const { expenses, friend: _friend, ...debts } = pair;
   const data = { ...debts, expenses };
+  const hasPending = Object.values(pair.owed).some((o) => 0n < o.total);
+
+  const openSettle = useCallback((expenseIds?: string[]) => {
+    setInitialExpenseIds(expenseIds);
+    setOpen(true);
+  }, []);
 
   return (
     <Card
       title={t('household.pending_title', { name: friendName })}
       action={
-        null !== pair.debtorId ? (
+        hasPending ? (
           <AppDrawer
             trigger={<Button className="h-11">{t('actions.settle_up')}</Button>}
+            onTriggerClick={() => setInitialExpenseIds(undefined)}
             open={open}
             onOpenChange={setOpen}
             title={t('actions.settle_up')}
             className="h-[85vh]"
           >
             <DebtSelector
+              key={initialExpenseIds?.join(',') ?? 'all'}
               friend={pair.friend}
               groupId={groupId}
               currency={currency}
+              initialExpenseIds={initialExpenseIds}
               onDone={() => setOpen(false)}
             />
           </AppDrawer>
@@ -120,7 +130,14 @@ const DebtsCard: React.FC<{
           currentUserId={currentUserId}
           friendName={friendName}
         />
-        <DebtList data={data} currency={currency} />
+        <DebtList
+          data={data}
+          currency={currency}
+          currentUserId={currentUserId}
+          friendId={pair.friend.id}
+          friendName={friendName}
+          onSettle={openSettle}
+        />
       </div>
     </Card>
   );

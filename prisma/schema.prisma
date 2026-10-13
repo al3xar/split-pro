@@ -192,6 +192,8 @@ model Expense {
   deletedBy           Int?
   updatedBy           Int?
   transactionId       String?
+  /// Imported fixed expense taken out of the history allocation (see lib/debts)
+  debtReopenedAt      DateTime?
   recurrenceId        Int?
   id                  String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   conversionToId      String?              @unique @db.Uuid

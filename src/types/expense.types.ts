@@ -23,6 +23,7 @@ export type CreateExpense = Omit<
   | 'transactionId'
   | 'conversionToId'
   | 'recurrenceId'
+  | 'debtReopenedAt'
 > & {
   expenseDate?: Date;
   fileKey?: string;

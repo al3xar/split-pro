@@ -536,12 +536,6 @@
     "personal_expenses": "Gastos personales"
   },
   "debts": {
-    "priority": {
-      "1": "Vivienda y fijos",
-      "2": "Comida",
-      "3": "Otros",
-      "4": "Ocio"
-    },
     "remaining_of": "quedan {{remaining}} de {{amount}}",
     "settled": "Saldado",
     "compensated": "Compensado",
@@ -555,7 +549,22 @@
     "quick_select": "Selección rápida",
     "total": "Total",
     "expenses_count_one": "{{count}} gasto",
-    "expenses_count_other": "{{count}} gastos"
+    "expenses_count_other": "{{count}} gastos",
+    "fixed": "Gastos fijos",
+    "variable": "Variables",
+    "you_owe_title": "Debes a {{name}}",
+    "owes_you_title": "{{name}} te debe",
+    "advance_yours": "Pagado a cuenta por ti",
+    "advance_theirs": "Pagado a cuenta por {{name}}",
+    "paid_fixed_one": "{{count}} gasto fijo ya pagado",
+    "paid_fixed_other": "{{count}} gastos fijos ya pagados",
+    "reopen": "Volver a pendiente",
+    "undo_reopen": "Deshacer",
+    "reopened": "reabierto",
+    "payment_prefix": "Pago",
+    "payment_name": "Concepto del pago",
+    "who_pays": "Quién paga",
+    "show_expenses": "Ver gastos de {{name}}"
   },
   "household": {
     "title": "Hogar",
