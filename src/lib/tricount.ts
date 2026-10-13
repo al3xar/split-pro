@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { guessCategory } from './categoryGuess';
+
 const KEY_REGEX = /^[A-Za-z0-9]{6,64}$/;
 const LINK_REGEX = /^(?:https?:\/\/)?(?:www\.)?tricount\.com\/([A-Za-z0-9]{6,64})\/?$/;
 
@@ -160,38 +162,6 @@ export const parseRegistry = (json: unknown): ParsedTricount => {
   return { title: registry.title, currency, members, entries };
 };
 
-const KEYWORDS: [RegExp, string][] = [
-  [/\b(alquiler|rent|renta)\b/, 'rent'],
-  [/\bhipoteca|mortgage\b/, 'mortgage'],
-  [/\b(luz|electricidad|electricity|iberdrola|endesa)\b/, 'electricity'],
-  [/\b(gas|butano|naturgy)\b/, 'gas'],
-  [/\b(agua|water)\b/, 'water'],
-  [/\b(internet|fibra|wifi|movistar|vodafone|orange|digi)\b/, 'internet'],
-  [/\b(movil|telefono|phone)\b/, 'phone'],
-  [
-    /\b(mercadona|lidl|carrefour|aldi|alcampo|eroski|supermercado|super|compra|groceries)\b/,
-    'groceries',
-  ],
-  [
-    /\b(cena|restaurante|restaurant|bar|tapas|almuerzo|desayuno|brunch|pizza|burger|sushi|kebab)\b/,
-    'diningOut',
-  ],
-  [/\b(gasolina|gasoil|diesel|combustible|repsol|cepsa|fuel)\b/, 'fuel'],
-  [/\b(taxi|uber|cabify)\b/, 'taxi'],
-  [/\b(parking|aparcamiento)\b/, 'parking'],
-  [/\b(tren|renfe|train)\b/, 'train'],
-  [/\b(vuelo|avion|ryanair|vueling|flight)\b/, 'plane'],
-  [/\b(hotel|airbnb|booking)\b/, 'hotel'],
-  [/\b(cine|movie|netflix|hbo|disney)\b/, 'movies'],
-  [/\b(spotify|concierto|music)\b/, 'music'],
-  [/\b(mascota|perro|gato|veterinario|pienso|pets?)\b/, 'pets'],
-  [/\b(farmacia|medico|dentista|pharmacy)\b/, 'medical'],
-  [/\b(ropa|zara|primark|clothes)\b/, 'clothing'],
-  [/\b(regalo|gift)\b/, 'gifts'],
-  [/\b(ikea|mueble|furniture)\b/, 'furniture'],
-  [/\b(limpieza|cleaning)\b/, 'cleaning'],
-];
-
 const ENUMS: Record<string, string> = {
   RESTAURANTS: 'diningOut',
   RESTAURANT: 'diningOut',
@@ -209,14 +179,9 @@ const ENUMS: Record<string, string> = {
   RENT: 'rent',
 };
 
-const normalize = (text: string) => text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-
 /** SplitPro category for a Tricount entry: keywords first (more specific), then the enum. */
-export const mapTricountCategory = (category: string, custom: string, description: string) => {
-  const text = normalize(`${custom} ${description}`);
-  const byKeyword = KEYWORDS.find(([regex]) => regex.test(text))?.[1];
-  return byKeyword ?? ENUMS[category.toUpperCase()] ?? 'general';
-};
+export const mapTricountCategory = (category: string, custom: string, description: string) =>
+  guessCategory(`${custom} ${description}`) ?? ENUMS[category.toUpperCase()] ?? 'general';
 
 export interface TricountExpense {
   paidBy: number;
