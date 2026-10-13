@@ -230,7 +230,7 @@ const AssistantSettingsPage: NextPageWithUser = () => {
                   {test.ok
                     ? t('assistant_settings.test_ok', { count: test.models.length })
                     : t(
-                        `assistant_settings.test_errors.${test.error?.startsWith('HTTP_401') || test.error?.startsWith('HTTP_403') ? 'auth' : 'TIMEOUT' === test.error ? 'timeout' : 'UNREACHABLE' === test.error ? 'unreachable' : 'http'}`,
+                        `assistant_settings.test_errors.${test.error?.startsWith('HTTP_401') || test.error?.startsWith('HTTP_403') ? 'auth' : 'TIMEOUT' === test.error ? 'timeout' : 'DNS' === test.error ? 'dns' : 'UNREACHABLE' === test.error ? 'unreachable' : 'http'}`,
                         { code: test.error },
                       )}
                 </p>

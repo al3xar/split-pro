@@ -761,6 +761,7 @@
     "test_errors": {
       "auth": "The endpoint rejected the API key ({{code}}).",
       "timeout": "No answer within 10 s. Is the server reachable from SplitPro?",
+      "dns": "The SplitPro server cannot resolve that host name. If it only exists on a VPN or private DNS, the server needs access to that network.",
       "unreachable": "Cannot reach the URL from the SplitPro server (DNS, network or certificate).",
       "http": "The endpoint answered with an error ({{code}})."
     }

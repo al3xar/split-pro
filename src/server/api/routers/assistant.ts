@@ -59,9 +59,16 @@ const testConnection = async (
       modelFound: model ? models.includes(model) : null,
     };
   } catch (error) {
+    const cause = (error as { cause?: { code?: string } }).cause?.code;
+    console.warn('Assistant connection test failed', baseUrl, cause ?? error);
     return {
       ok: false as const,
-      error: error instanceof Error && 'TimeoutError' === error.name ? 'TIMEOUT' : 'UNREACHABLE',
+      error:
+        error instanceof Error && 'TimeoutError' === error.name
+          ? 'TIMEOUT'
+          : 'ENOTFOUND' === cause || 'EAI_AGAIN' === cause
+            ? 'DNS'
+            : 'UNREACHABLE',
       models: [] as string[],
     };
   }
