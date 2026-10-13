@@ -671,5 +671,30 @@
       "INCOME": "Aún no hay ingresos.",
       "IGNORED": "No hay movimientos ignorados."
     }
+  },
+  "assistant": {
+    "title": "Asistente",
+    "new": "Nueva conversación",
+    "delete": "Borrar conversación",
+    "conversations": "Conversaciones",
+    "untitled": "Conversación",
+    "welcome_title": "Pregunta sobre el dinero de casa",
+    "welcome_body": "Puedo listar gastos, resumir en qué gastáis, decirte qué queda pendiente y preparar gastos nuevos para que los confirmes.",
+    "placeholder": "Pregunta o dime un gasto…",
+    "send": "Enviar",
+    "thinking": "Pensando…",
+    "review_expense": "Revisar y guardar",
+    "proposal_saved": "Guardado",
+    "proposal_cancelled": "Cancelado",
+    "unavailable": "El modelo de IA no está disponible ahora mismo.",
+    "error": "Algo ha fallado. Inténtalo de nuevo.",
+    "disabled_title": "El asistente no está configurado",
+    "disabled_body": "Define LLM_BASE_URL, LLM_MODEL y LLM_API_KEY en el servidor para activarlo.",
+    "suggestions": {
+      "spent_month": "¿Cuánto llevamos gastado este mes?",
+      "pending_food": "¿Qué me queda por pagar de comida?",
+      "add_dinner": "Añade 40 € de cena, pagué yo",
+      "top_categories": "¿En qué se nos va más dinero este año?"
+    }
   }
 }

@@ -10,6 +10,7 @@ import {
   InboxIcon,
   Languages,
   ListIcon,
+  Sparkles,
   Star,
 } from 'lucide-react';
 import type { GetServerSideProps } from 'next';
@@ -175,6 +176,11 @@ const AccountPage: NextPageWithUser<{
           <AccountButton href="/activity" className="lg:hidden">
             <ListIcon className="size-5 text-sky-500" />
             {t('navigation.activity')}
+          </AccountButton>
+
+          <AccountButton href="/assistant">
+            <Sparkles className="size-5 text-violet-500" />
+            {t('assistant.title')}
           </AccountButton>
 
           <AccountButton href="/inbox">

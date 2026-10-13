@@ -709,5 +709,30 @@
       "INCOME": "No incomes yet.",
       "IGNORED": "No ignored movements."
     }
+  },
+  "assistant": {
+    "title": "Assistant",
+    "new": "New conversation",
+    "delete": "Delete conversation",
+    "conversations": "Conversations",
+    "untitled": "Conversation",
+    "welcome_title": "Ask about your household money",
+    "welcome_body": "I can list expenses, summarise spending, tell you what is pending and prepare new expenses for you to confirm.",
+    "placeholder": "Ask or tell me an expense…",
+    "send": "Send",
+    "thinking": "Thinking…",
+    "review_expense": "Review and save",
+    "proposal_saved": "Saved",
+    "proposal_cancelled": "Cancelled",
+    "unavailable": "The AI model is not reachable right now.",
+    "error": "Something went wrong. Try again.",
+    "disabled_title": "The assistant is not configured",
+    "disabled_body": "Set LLM_BASE_URL, LLM_MODEL and LLM_API_KEY on the server to enable it.",
+    "suggestions": {
+      "spent_month": "How much have we spent this month?",
+      "pending_food": "What do I still owe for food?",
+      "add_dinner": "Add 40 € for dinner, I paid",
+      "top_categories": "Where does most of our money go this year?"
+    }
   }
 }
