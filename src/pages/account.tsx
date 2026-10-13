@@ -5,7 +5,9 @@ import {
   Download,
   DownloadCloud,
   FileDown,
+  FileUp,
   HeartHandshakeIcon,
+  InboxIcon,
   Languages,
   ListIcon,
   Star,
@@ -173,6 +175,16 @@ const AccountPage: NextPageWithUser<{
           <AccountButton href="/activity" className="lg:hidden">
             <ListIcon className="size-5 text-sky-500" />
             {t('navigation.activity')}
+          </AccountButton>
+
+          <AccountButton href="/inbox">
+            <InboxIcon className="size-5 text-orange-500" />
+            {t('inbox.title')}
+          </AccountButton>
+
+          <AccountButton href="/bank-import">
+            <FileUp className="size-5 text-cyan-500" />
+            {t('bank_import.title')}
           </AccountButton>
 
           <AccountButton href="/import-tricount">

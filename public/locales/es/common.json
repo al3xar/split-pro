@@ -531,7 +531,8 @@
     "stop_title": "¿Dejar de repetir?",
     "stop_description": "No se añadirán más movimientos. Los que ya están se conservan.",
     "stopped": "Ya no se repite",
-    "recurring_badge": "Recurrente"
+    "recurring_badge": "Recurrente",
+    "personal_expenses": "Gastos personales"
   },
   "debts": {
     "priority": {
@@ -614,6 +615,61 @@
       "ONE_MEMBER_MUST_BE_YOU": "Elige «Yo» en exactamente un participante.",
       "EMAIL_REQUIRED": "Añade un email para cada persona nueva.",
       "generic": "Algo ha fallado. Inténtalo de nuevo."
+    }
+  },
+  "bank_import": {
+    "title": "Importar extracto",
+    "file_label": "Fichero del extracto (CSV)",
+    "file_hint": "Descarga los movimientos de tu banco (o Trade Republic → exportar transacciones) en CSV. Si tu banco solo da Excel, ábrelo y guárdalo como CSV.",
+    "choose_file": "Elegir un fichero CSV",
+    "empty_file": "El fichero no tiene movimientos.",
+    "columns": "Columnas",
+    "date": "Fecha",
+    "description": "Concepto",
+    "amount": "Importe",
+    "debit": "Cargo (salida)",
+    "credit": "Abono (entrada)",
+    "currency": "Moneda",
+    "date_format": "Formato de fecha",
+    "decimal": "Formato de números",
+    "profile_name": "Guardar como (nombre del banco)",
+    "default_profile": "Mi banco",
+    "preview": "Vista previa — {{count}} movimientos",
+    "import": "Importar {{count}} movimientos a la bandeja",
+    "done": "{{created}} movimientos añadidos, {{duplicates}} ya estaban importados.",
+    "go_inbox": "Ir a la bandeja",
+    "error": "No se ha podido importar"
+  },
+  "inbox": {
+    "title": "Bandeja",
+    "import": "Importar extracto",
+    "remember": "Recordar mi elección para movimientos parecidos",
+    "selected": "{{count}} seleccionados",
+    "shared": "Compartido",
+    "personal": "Solo mío",
+    "income": "Ingreso",
+    "ignore": "Ignorar",
+    "undo": "Deshacer",
+    "select": "Seleccionar {{name}}",
+    "category_for": "Categoría de {{name}}",
+    "suggested": "Sugerencia: {{action}}",
+    "no_household": "Marca un grupo como Hogar para poder compartir movimientos.",
+    "pending_banner": "{{count}} movimientos del banco por revisar",
+    "review": "Revisar",
+    "error": "No se ha podido guardar",
+    "status": {
+      "PENDING": "Pendientes",
+      "SHARED": "Compartidos",
+      "PERSONAL": "Solo míos",
+      "INCOME": "Ingresos",
+      "IGNORED": "Ignorados"
+    },
+    "empty": {
+      "PENDING": "Nada por revisar. Importa un extracto para empezar.",
+      "SHARED": "Aún no hay movimientos compartidos.",
+      "PERSONAL": "Aún no hay gastos personales.",
+      "INCOME": "Aún no hay ingresos.",
+      "IGNORED": "No hay movimientos ignorados."
     }
   }
 }

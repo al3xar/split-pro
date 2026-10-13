@@ -161,6 +161,7 @@ const HouseholdPage: NextPageWithUser = () => {
     { placeholderData: keepPreviousData, enabled: router.isReady },
   );
   const data = householdQuery.data;
+  const pendingCountQuery = api.inbox.pendingCount.useQuery();
   const currency = data?.group.currency ?? 'EUR';
   const helpers = getCurrencyHelpersCached(currency);
   const formatAmount = useCallback((amount: bigint) => helpers.toUIString(amount), [helpers]);
@@ -223,6 +224,17 @@ const HouseholdPage: NextPageWithUser = () => {
             )}
             aria-busy={householdQuery.isFetching}
           >
+            {pendingCountQuery.data ? (
+              <Link
+                href="/inbox"
+                className="bg-primary/10 border-primary/30 flex min-h-12 items-center justify-between gap-3 rounded-xl border px-4 py-3 text-sm"
+              >
+                <span className="font-medium">
+                  {t('inbox.pending_banner', { count: pendingCountQuery.data })}
+                </span>
+                <span className="text-primary font-semibold">{t('inbox.review')}</span>
+              </Link>
+            ) : null}
             {data.pairs.map((pair) => (
               <DebtsCard
                 key={pair.friend.id}

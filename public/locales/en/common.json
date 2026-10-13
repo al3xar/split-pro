@@ -569,7 +569,8 @@
     "stop_title": "Stop repeating?",
     "stop_description": "No more entries will be added. The ones already added are kept.",
     "stopped": "No longer repeating",
-    "recurring_badge": "Recurring"
+    "recurring_badge": "Recurring",
+    "personal_expenses": "Personal expenses"
   },
   "debts": {
     "priority": {
@@ -652,6 +653,61 @@
       "ONE_MEMBER_MUST_BE_YOU": "Choose “Me” for exactly one participant.",
       "EMAIL_REQUIRED": "Add an email for each new person.",
       "generic": "Something went wrong. Try again."
+    }
+  },
+  "bank_import": {
+    "title": "Import bank statement",
+    "file_label": "Statement file (CSV)",
+    "file_hint": "Download your movements from your bank (or Trade Republic → export transactions) as CSV. If your bank only gives Excel, open it and save it as CSV.",
+    "choose_file": "Choose a CSV file",
+    "empty_file": "The file has no movements.",
+    "columns": "Columns",
+    "date": "Date",
+    "description": "Description",
+    "amount": "Amount",
+    "debit": "Debit (money out)",
+    "credit": "Credit (money in)",
+    "currency": "Currency",
+    "date_format": "Date format",
+    "decimal": "Number format",
+    "profile_name": "Save as (bank name)",
+    "default_profile": "My bank",
+    "preview": "Preview — {{count}} movements",
+    "import": "Import {{count}} movements to the inbox",
+    "done": "{{created}} movements added, {{duplicates}} were already imported.",
+    "go_inbox": "Go to the inbox",
+    "error": "Could not import"
+  },
+  "inbox": {
+    "title": "Inbox",
+    "import": "Import statement",
+    "remember": "Remember my choice for similar movements",
+    "selected": "{{count}} selected",
+    "shared": "Shared",
+    "personal": "Only mine",
+    "income": "Income",
+    "ignore": "Ignore",
+    "undo": "Undo",
+    "select": "Select {{name}}",
+    "category_for": "Category for {{name}}",
+    "suggested": "Suggested: {{action}}",
+    "no_household": "Mark a group as Household to share movements.",
+    "pending_banner": "{{count}} bank movements to review",
+    "review": "Review",
+    "error": "Could not save",
+    "status": {
+      "PENDING": "Pending",
+      "SHARED": "Shared",
+      "PERSONAL": "Only mine",
+      "INCOME": "Income",
+      "IGNORED": "Ignored"
+    },
+    "empty": {
+      "PENDING": "Nothing to review. Import a statement to start.",
+      "SHARED": "No shared movements yet.",
+      "PERSONAL": "No personal expenses yet.",
+      "INCOME": "No incomes yet.",
+      "IGNORED": "No ignored movements."
     }
   }
 }

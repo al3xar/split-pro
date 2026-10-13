@@ -57,6 +57,24 @@ const validCategory = (type: 'INCOME' | 'EXPENSE', category: string | null | und
       : 'general';
 
 export const inboxRouter = createTRPCRouter({
+  /** What the inbox needs to open the add dialog: the household group and default currency. */
+  context: protectedProcedure.query(async ({ ctx }) => {
+    const group = await db.group.findFirst({
+      where: {
+        isHousehold: true,
+        archivedAt: null,
+        groupUsers: { some: { userId: ctx.session.user.id } },
+      },
+      orderBy: { householdSince: 'desc' },
+      select: { id: true, name: true, defaultCurrency: true },
+    });
+    return {
+      householdGroup: group,
+      defaultCurrency:
+        group?.defaultCurrency ?? ctx.session.user.defaultCurrency ?? ctx.session.user.currency,
+    };
+  }),
+
   pendingCount: protectedProcedure.query(({ ctx }) =>
     db.importedTransaction.count({ where: { userId: ctx.session.user.id, status: 'PENDING' } }),
   ),
