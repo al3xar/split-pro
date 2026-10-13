@@ -1,3 +1,5 @@
+import { AddExpenseFab } from '~/components/AddExpense/AddExpenseFab';
+import { AddExpenseTrigger } from '~/components/AddExpense/AddExpenseTrigger';
 import { clsx } from 'clsx';
 import {
   Archive,
@@ -544,11 +546,11 @@ const BalancePage: NextPageWithUser<{
               />
             </div>
             <div className="mb-4 flex justify-center gap-2 overflow-y-auto border-b pb-4">
-              <Link href={`/add?groupId=${groupId}`}>
+              <AddExpenseTrigger prefill={{ groupId }}>
                 <Button size="sm" className="w-40 gap-1 text-sm lg:w-[180px]" disabled={isArchived}>
                   <PlusIcon className="size-4" /> {t('actions.add_expense')}
                 </Button>
-              </Link>
+              </AddExpenseTrigger>
 
               <AddMembers group={groupDetailQuery.data} enableSendingInvites={enableSendingInvites}>
                 <Button size="sm" responsiveIcon variant="secondary" disabled={isArchived}>
@@ -598,6 +600,7 @@ const BalancePage: NextPageWithUser<{
             </Tabs>
           </div>
         )}
+        <AddExpenseFab groupId={groupId} />
       </MainLayout>
     </>
   );

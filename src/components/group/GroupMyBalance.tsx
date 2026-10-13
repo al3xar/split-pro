@@ -22,47 +22,38 @@ const GroupMyBalance: React.FC<GroupMyBalanceProps> = ({
 
   const userMap = useMemo(
     () =>
-      users.reduce< Record<number, User>>(
-        (acc, user) => {
-          acc[user.id] = user;
-          return acc;
-        },
-        {},
-      ),
+      users.reduce<Record<number, User>>((acc, user) => {
+        acc[user.id] = user;
+        return acc;
+      }, {}),
     [users],
   );
 
   const friendBalances = useMemo(
     () =>
-      groupBalances.reduce< Record<number, Record<string, bigint>>>(
-        (acc, balance) => {
-          if (balance.userId === userId && 0 < BigMath.abs(balance.amount)) {
-            acc[balance.friendId] ??= {};
-            const friendBalance = acc[balance.friendId]!;
-            friendBalance[balance.currency] =
-              (friendBalance[balance.currency] ?? 0n) + balance.amount;
-          }
-          return acc;
-        },
-        {},
-      ),
+      groupBalances.reduce<Record<number, Record<string, bigint>>>((acc, balance) => {
+        if (balance.userId === userId && 0 < BigMath.abs(balance.amount)) {
+          acc[balance.friendId] ??= {};
+          const friendBalance = acc[balance.friendId]!;
+          friendBalance[balance.currency] =
+            (friendBalance[balance.currency] ?? 0n) + balance.amount;
+        }
+        return acc;
+      }, {}),
     [groupBalances, userId],
   );
 
   const cumulatedBalances = useMemo(
     () =>
       Object.entries(
-        Object.values(friendBalances).reduce< Record<string, bigint>>(
-          (acc, balances) => {
-            if (balances) {
-              Object.entries(balances).forEach(([currency, amount]) => {
-                acc[currency] = (acc[currency] ?? 0n) + amount;
-              });
-            }
-            return acc;
-          },
-          {},
-        ),
+        Object.values(friendBalances).reduce<Record<string, bigint>>((acc, balances) => {
+          if (balances) {
+            Object.entries(balances).forEach(([currency, amount]) => {
+              acc[currency] = (acc[currency] ?? 0n) + amount;
+            });
+          }
+          return acc;
+        }, {}),
       ).map(([currency, amount]) => ({ currency, amount })),
     [friendBalances],
   );

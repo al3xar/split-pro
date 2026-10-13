@@ -1,3 +1,5 @@
+import { AddExpenseFab } from '~/components/AddExpense/AddExpenseFab';
+import { AddExpenseTrigger } from '~/components/AddExpense/AddExpenseTrigger';
 import { ArrowUpOnSquareIcon } from '@heroicons/react/24/outline';
 import { Download, PlusIcon } from 'lucide-react';
 import Head from 'next/head';
@@ -118,15 +120,16 @@ const BalancePage: NextPageWithUser = ({ user }) => {
                 </Button>
               </DownloadAppDrawer>
               {!isPwa && <p>{t('ui.or')}</p>}
-              <Link href="/add">
+              <AddExpenseTrigger prefill={{}}>
                 <Button className="w-62.5">
                   <PlusIcon className="mr-2 h-5 w-5 text-black" />
                   {t('actions.add_expense')}
                 </Button>
-              </Link>
+              </AddExpenseTrigger>
             </div>
           ) : null}
         </div>
+        <AddExpenseFab />
       </MainLayout>
     </>
   );

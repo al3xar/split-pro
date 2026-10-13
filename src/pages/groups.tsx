@@ -1,3 +1,4 @@
+import { AddExpenseFab } from '~/components/AddExpense/AddExpenseFab';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
@@ -96,6 +97,7 @@ const BalancePage: NextPageWithUser = () => {
             </>
           )}
         </div>
+        <AddExpenseFab />
       </MainLayout>
     </>
   );

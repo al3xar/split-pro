@@ -13,6 +13,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
+import { useAddExpenseDialog } from '~/store/addExpenseDialogStore';
+
 import { LoadingSpinner } from '../ui/spinner';
 
 interface MainLayoutProps {
@@ -34,6 +36,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({
   const { t } = useTranslation();
   const router = useRouter();
   const currentPath = router.pathname;
+  const openWith = useAddExpenseDialog((s) => s.openWith);
+  const openAddDialog = React.useCallback(() => openWith(), [openWith]);
 
   return (
     <div className="bg-background h-full w-full">
@@ -75,6 +79,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
             title={t?.('navigation.add_expense') ?? 'Add Expense'}
             Icon={SolidPlusCircleIcon}
             link="/add"
+            onClick={openAddDialog}
             currentPath={currentPath}
           />
           <NavItemDesktop
@@ -146,6 +151,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
           title={t?.('navigation.add') ?? 'Add'}
           Icon={SolidPlusCircleIcon}
           link="/add"
+          onClick={openAddDialog}
           currentPath={currentPath}
         />
         <NavItem
@@ -170,6 +176,8 @@ interface NavItemProps {
   Icon: LucideIcon;
   link: string;
   currentPath?: string;
+  /** Renders a button (e.g. open the add dialog) instead of a link */
+  onClick?: () => void;
 }
 
 const isActiveLink = (link: string, currentPath?: string) =>
@@ -177,12 +185,15 @@ const isActiveLink = (link: string, currentPath?: string) =>
   (currentPath?.startsWith(`${link}/`) ?? false) ||
   ('/analytics' === link && '/finances' === currentPath);
 
-const NavItem: React.FC<NavItemProps> = ({ title, Icon, link, currentPath }) => {
+const NavItem: React.FC<NavItemProps> = ({ title, Icon, link, currentPath, onClick }) => {
   const isActive = isActiveLink(link, currentPath);
+  const Element = onClick ? 'button' : Link;
 
   return (
-    <Link
+    <Element
       href={link}
+      type={onClick ? 'button' : undefined}
+      onClick={onClick}
       aria-current={isActive ? 'page' : undefined}
       className={clsx(
         'flex min-h-14 min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-lg px-0.5 pt-3 pb-1',
@@ -195,16 +206,19 @@ const NavItem: React.FC<NavItemProps> = ({ title, Icon, link, currentPath }) => 
       >
         {title}
       </span>
-    </Link>
+    </Element>
   );
 };
 
-const NavItemDesktop: React.FC<NavItemProps> = ({ title, Icon, link, currentPath }) => {
+const NavItemDesktop: React.FC<NavItemProps> = ({ title, Icon, link, currentPath, onClick }) => {
   const isActive = isActiveLink(link, currentPath);
+  const Element = onClick ? 'button' : Link;
 
   return (
-    <Link
+    <Element
       href={link}
+      type={onClick ? 'button' : undefined}
+      onClick={onClick}
       aria-current={isActive ? 'page' : undefined}
       className={clsx(
         'flex w-[150px] items-center gap-2 rounded-lg px-2 py-3 transition-colors',
@@ -213,7 +227,7 @@ const NavItemDesktop: React.FC<NavItemProps> = ({ title, Icon, link, currentPath
     >
       <Icon className="size-6 shrink-0" aria-hidden />
       <span className="capitalize">{title}</span>
-    </Link>
+    </Element>
   );
 };
 export default MainLayout;

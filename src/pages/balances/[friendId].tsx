@@ -1,3 +1,5 @@
+import { AddExpenseFab } from '~/components/AddExpense/AddExpenseFab';
+import { AddExpenseTrigger } from '~/components/AddExpense/AddExpenseTrigger';
 import { ChevronLeftIcon, HandCoins, Pencil, PlusIcon } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -185,11 +187,11 @@ const FriendPage: NextPageWithUser = ({ user }) => {
                   <HandCoins className="size-4" /> {t('actions.settle_up')}
                 </Button>
               </SettleUp>
-              <Link href={`/add?friendId=${friendQuery.data.id}`}>
+              <AddExpenseTrigger prefill={{ friendId: friendQuery.data.id }}>
                 <Button size="sm" variant="secondary" responsiveIcon>
                   <PlusIcon className="size-4" /> {t('actions.add_expense')}
                 </Button>
-              </Link>
+              </AddExpenseTrigger>
               <Export
                 expenses={expenses.data}
                 fileName={`expenses_with_${displayName(friendQuery.data)}`}
@@ -207,6 +209,7 @@ const FriendPage: NextPageWithUser = ({ user }) => {
             />
           </div>
         )}
+        <AddExpenseFab friendId={Number.isNaN(_friendId) ? undefined : _friendId} />
       </MainLayout>
     </>
   );

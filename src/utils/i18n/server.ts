@@ -7,7 +7,9 @@ export const customServerSideTranslations = async (
   namespaces: string[],
 ): Promise<SSRConfig> => {
   locale ??= 'en';
-  return await serverSideTranslations(locale, namespaces, i18nConfig);
+  // The global add-expense dialog can open on any page and needs these namespaces.
+  const all = [...new Set([...namespaces, 'common', 'categories', 'currencies'])];
+  return await serverSideTranslations(locale, all, i18nConfig);
 };
 
 export const withI18nStaticProps =

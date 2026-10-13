@@ -12,6 +12,7 @@ import { Toaster } from 'sonner';
 import { LoadingSpinner } from '~/components/ui/spinner';
 import { ThemeProvider } from 'next-themes';
 import { CurrencyHelpersProvider } from '~/contexts/CurrencyHelpersContext';
+import { AddExpenseDialog } from '~/components/AddExpense/AddExpenseDialog';
 import { useAddExpenseStore } from '~/store/addStore';
 import { useAppStore } from '~/store/appStore';
 import { type NextPageWithUser } from '~/types';
@@ -178,7 +179,12 @@ const Auth: React.FC<{ Page: NextPageWithUser; pageProps: any }> = ({ Page, page
     );
   }
 
-  return <Page user={data.user} {...pageProps} />;
+  return (
+    <>
+      <Page user={data.user} {...pageProps} />
+      <AddExpenseDialog user={data.user} />
+    </>
+  );
 };
 
 export default api.withTRPC(appWithTranslation(MyApp, i18nConfig));

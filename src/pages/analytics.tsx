@@ -1,3 +1,4 @@
+import { AddExpenseFab } from '~/components/AddExpense/AddExpenseFab';
 import { keepPreviousData } from '@tanstack/react-query';
 import {
   ArrowDownRightIcon,
@@ -346,6 +347,7 @@ const AnalyticsPage: NextPageWithUser = () => {
             </Card>
           ) : null}
         </div>
+        <AddExpenseFab />
       </MainLayout>
     </>
   );

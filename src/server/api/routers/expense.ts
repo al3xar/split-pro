@@ -3,6 +3,8 @@ import { z } from 'zod';
 
 import { simplifyDebts } from '~/lib/simplify';
 import { createTRPCRouter, groupProcedure, protectedProcedure } from '~/server/api/trpc';
+import { env } from '~/env';
+import { isBankConnectionConfigured } from '~/server/bankTransactionHelper';
 import { db } from '~/server/db';
 import { BigMath, currencyConversion } from '~/utils/numbers';
 
@@ -22,6 +24,13 @@ import { getUserMap } from './user';
 import { FriendBalance } from '~/components/Friend/FriendBalance';
 
 export const expenseRouter = createTRPCRouter({
+  /** Server settings the add-expense form needs (used by the global add dialog). */
+  getAddConfig: protectedProcedure.query(() => ({
+    enableSendingInvites: Boolean(env.ENABLE_SENDING_INVITES),
+    bankConnectionEnabled: isBankConnectionConfigured(),
+    maxUploadFileSizeMB: env.UPLOAD_MAX_FILE_SIZE_MB,
+  })),
+
   getCumulatedBalances: protectedProcedure.query(async ({ ctx }) => {
     const cumulatedBalances = await db.balanceView.groupBy({
       by: ['currency'],

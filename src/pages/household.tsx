@@ -1,3 +1,4 @@
+import { AddExpenseFab } from '~/components/AddExpense/AddExpenseFab';
 import { keepPreviousData } from '@tanstack/react-query';
 import { ArrowDownRightIcon, ArrowUpRightIcon, DownloadIcon, UsersIcon } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -340,6 +341,7 @@ const HouseholdPage: NextPageWithUser = () => {
             ) : null}
           </div>
         ) : null}
+        <AddExpenseFab groupId={data?.group.id} />
       </MainLayout>
     </>
   );
